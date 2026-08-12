@@ -13,6 +13,7 @@ interface Props {
 const LINKS = [
   { href: '/admin', label: 'نظرة عامة' },
   { href: '/admin/menu', label: 'المنيو' },
+  { href: '/admin/branches', label: 'الفروع' },
   { href: '/admin/reviews', label: 'التقييمات' },
   { href: '/admin/settings', label: 'إعدادات المطعم' },
 ];

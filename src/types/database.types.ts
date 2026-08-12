@@ -215,6 +215,47 @@ export type Database = {
           },
         ];
       };
+      restaurant_branches: {
+        Row: {
+          id: string;
+          restaurant_id: string;
+          name: string;
+          address: string | null;
+          phone_whatsapp: string;
+          google_maps_embed_url: string | null;
+          display_order: number;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          restaurant_id: string;
+          name: string;
+          address?: string | null;
+          phone_whatsapp: string;
+          google_maps_embed_url?: string | null;
+          display_order?: number;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          restaurant_id?: string;
+          name?: string;
+          address?: string | null;
+          phone_whatsapp?: string;
+          google_maps_embed_url?: string | null;
+          display_order?: number;
+          created_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'restaurant_branches_restaurant_id_fkey';
+            columns: ['restaurant_id'];
+            isOneToOne: false;
+            referencedRelation: 'restaurants';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
     };
     Views: Record<never, never>;
     Functions: {
@@ -233,3 +274,4 @@ export type AdminUser = Database['public']['Tables']['admin_users']['Row'];
 export type MenuCategory = Database['public']['Tables']['menu_categories']['Row'];
 export type MenuItem = Database['public']['Tables']['menu_items']['Row'];
 export type Review = Database['public']['Tables']['reviews']['Row'];
+export type RestaurantBranch = Database['public']['Tables']['restaurant_branches']['Row'];

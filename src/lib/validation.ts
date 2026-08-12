@@ -33,6 +33,22 @@ export const restaurantSettingsSchema = z.object({
   logo_url: z.string().url().optional().or(z.literal('')),
 });
 
+export const branchSchema = z.object({
+  name: z.string().trim().min(1, 'اسم الفرع مطلوب').max(120),
+  address: z.string().trim().max(300).optional().or(z.literal('')),
+  phone_whatsapp: z
+    .string()
+    .trim()
+    .regex(/^\+?[1-9]\d{6,14}$/, 'رقم غير صحيح (مثال: +962791234567)'),
+  google_maps_embed_url: z
+    .string()
+    .trim()
+    .url('رابط غير صحيح')
+    .optional()
+    .or(z.literal('')),
+  display_order: z.coerce.number().int().default(0),
+});
+
 export const reviewSchema = z.object({
   customer_name: z.string().trim().min(1, 'الاسم مطلوب').max(80),
   rating: z.coerce.number().int().min(1).max(5),
@@ -41,5 +57,6 @@ export const reviewSchema = z.object({
 
 export type MenuCategoryInput = z.infer<typeof menuCategorySchema>;
 export type MenuItemInput = z.infer<typeof menuItemSchema>;
+export type BranchInput = z.infer<typeof branchSchema>;
 export type RestaurantSettingsInput = z.infer<typeof restaurantSettingsSchema>;
 export type ReviewInput = z.infer<typeof reviewSchema>;

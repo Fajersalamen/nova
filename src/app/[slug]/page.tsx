@@ -6,9 +6,17 @@ import { fetchGoogleReviews } from '@/lib/google-places';
 import { MenuList } from '@/components/public/MenuList';
 import { MapEmbed } from '@/components/public/MapEmbed';
 import { WhatsAppButton } from '@/components/public/WhatsAppButton';
+import { CallButton } from '@/components/public/CallButton';
 import { ReviewsSection } from '@/components/public/ReviewsSection';
 import { ReviewForm } from '@/components/public/ReviewForm';
-import type { MenuCategory, MenuItem, Restaurant, Review } from '@/types/database.types';
+import { BranchesSection } from '@/components/public/BranchesSection';
+import type {
+  MenuCategory,
+  MenuItem,
+  Restaurant,
+  RestaurantBranch,
+  Review,
+} from '@/types/database.types';
 
 // Static-with-revalidation instead of per-request SSR: the menu changes a
 // few times a week at most, but the page is hit by every visitor. Serving
@@ -49,7 +57,7 @@ async function getRestaurantData(slug: string) {
 
   if (!restaurant || restaurant.subscription_status === 'canceled') return null;
 
-  const [categoriesResult, itemsResult, reviewsResult] = await Promise.all([
+  const [categoriesResult, itemsResult, reviewsResult, branchesResult] = await Promise.all([
     supabase
       .from('menu_categories')
       .select('*')
@@ -68,6 +76,11 @@ async function getRestaurantData(slug: string) {
       .eq('is_approved', true)
       .order('created_at', { ascending: false })
       .limit(12),
+    supabase
+      .from('restaurant_branches')
+      .select('*')
+      .eq('restaurant_id', restaurant.id)
+      .order('display_order', { ascending: true }),
   ]);
 
   return {
@@ -75,6 +88,7 @@ async function getRestaurantData(slug: string) {
     categories: (categoriesResult.data ?? []) as MenuCategory[],
     items: (itemsResult.data ?? []) as MenuItem[],
     internalReviews: (reviewsResult.data ?? []) as Review[],
+    branches: (branchesResult.data ?? []) as RestaurantBranch[],
   };
 }
 
@@ -101,7 +115,7 @@ export default async function RestaurantPage({ params }: PageProps) {
   const data = await getRestaurantData(slug);
   if (!data) notFound();
 
-  const { restaurant, categories, items, internalReviews } = data;
+  const { restaurant, categories, items, internalReviews, branches } = data;
 
   // Google reviews take precedence when the restaurant has linked a Place
   // ID; otherwise the internal moderated reviews are shown.
@@ -124,10 +138,13 @@ export default async function RestaurantPage({ params }: PageProps) {
         )}
         <h1 className="text-4xl font-bold tracking-tight text-neutral-900">{restaurant.name}</h1>
         {restaurant.address && <p className="text-neutral-600">{restaurant.address}</p>}
-        <WhatsAppButton
-          phoneWhatsapp={restaurant.phone_whatsapp}
-          restaurantName={restaurant.name}
-        />
+        <div className="flex flex-wrap justify-center gap-3">
+          <WhatsAppButton
+            phoneWhatsapp={restaurant.phone_whatsapp}
+            restaurantName={restaurant.name}
+          />
+          <CallButton phone={restaurant.phone_whatsapp} />
+        </div>
       </header>
 
       <div className="mt-14 space-y-14">
@@ -158,6 +175,8 @@ export default async function RestaurantPage({ params }: PageProps) {
         {restaurant.google_maps_embed_url && (
           <MapEmbed embedUrl={restaurant.google_maps_embed_url} restaurantName={restaurant.name} />
         )}
+
+        <BranchesSection branches={branches} restaurantName={restaurant.name} />
       </div>
 
       <footer className="mt-16 border-t border-neutral-200 pt-6 text-center text-sm text-neutral-500">
