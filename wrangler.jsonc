@@ -1,0 +1,23 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "nova-restaurant-saas",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2025-03-25",
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+  // Backs the ISR/data cache. Create the bucket first:
+  //   npx wrangler r2 bucket create nova-next-cache
+  "r2_buckets": [
+    {
+      "binding": "NEXT_INC_CACHE_R2_BUCKET",
+      "bucket_name": "nova-next-cache"
+    }
+  ]
+
+  // Secrets (Supabase keys, R2 credentials, REVALIDATE_SECRET) are NOT
+  // stored here. Set them per environment in the Cloudflare dashboard, or
+  // with: npx wrangler secret put <NAME>
+}
