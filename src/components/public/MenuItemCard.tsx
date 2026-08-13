@@ -12,7 +12,7 @@ interface Props {
 
 export function MenuItemCard({ item, restaurantName, phoneWhatsapp }: Props) {
   return (
-    <article className="flex flex-col overflow-hidden rounded-xl border border-neutral-200 bg-white shadow-sm">
+    <article className="flex flex-col overflow-hidden rounded-xl border border-neutral-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
       {(item.image_url || item.video_url) && (
         // Explicit aspect ratio reserves the space before media loads,
         // which keeps CLS at zero.
@@ -35,7 +35,9 @@ export function MenuItemCard({ item, restaurantName, phoneWhatsapp }: Props) {
       <div className="flex flex-1 flex-col gap-2 p-4">
         <div className="flex items-start justify-between gap-3">
           <h3 className="font-semibold text-neutral-900">{item.name}</h3>
-          <span className="shrink-0 font-bold text-brand-700">{formatPrice(item.price)}</span>
+          <span className="shrink-0 rounded-full bg-brand-50 px-2.5 py-1 text-sm font-bold text-brand-700">
+            {formatPrice(item.price)}
+          </span>
         </div>
 
         {item.description && (

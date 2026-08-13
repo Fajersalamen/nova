@@ -11,5 +11,5 @@ html {
 }
 
 body {
-  @apply bg-white text-neutral-900 antialiased;
+  @apply overflow-x-hidden bg-white text-neutral-900 antialiased;
 }

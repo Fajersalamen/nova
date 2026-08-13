@@ -44,8 +44,6 @@ export function BranchesSection({ branches, restaurantName }: Props) {
                   title={`خريطة ${branch.name}`}
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
-                  width={600}
-                  height={220}
                   className="h-[220px] w-full border-0"
                 />
               </div>

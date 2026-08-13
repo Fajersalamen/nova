@@ -21,8 +21,6 @@ export function MapEmbed({ embedUrl, restaurantName }: Props) {
           loading="lazy"
           referrerPolicy="no-referrer-when-downgrade"
           allowFullScreen
-          width={600}
-          height={340}
           className="h-[340px] w-full border-0"
         />
       </div>

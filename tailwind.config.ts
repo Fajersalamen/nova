@@ -5,17 +5,26 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        // Warm red/orange scale — brand-neutral default tuned for the
+        // restaurant vertical (matches the red/orange signage most
+        // Jordanian food brands already use), swap per-tenant via
+        // theme_settings later if needed.
         brand: {
-          50: '#f4f7f2',
-          100: '#e6ede1',
-          200: '#c9dabc',
-          300: '#a3c090',
-          400: '#7aa165',
-          500: '#5a8245',
-          600: '#456634',
-          700: '#37512a',
-          800: '#2e4224',
-          900: '#28381f',
+          50: '#fef2f0',
+          100: '#fde3de',
+          200: '#fbc7bd',
+          300: '#f7a394',
+          400: '#f2735d',
+          500: '#e8432a',
+          600: '#cc2e17',
+          700: '#a82412',
+          800: '#841d10',
+          900: '#5e150c',
+        },
+        accent: {
+          400: '#ffb020',
+          500: '#f59e0b',
+          600: '#d97706',
         },
       },
     },
