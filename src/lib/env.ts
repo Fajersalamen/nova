@@ -9,16 +9,29 @@
  * variables are missing instead of crashing.
  */
 
-const REQUIRED_SUPABASE_KEYS = [
-  'NEXT_PUBLIC_SUPABASE_URL',
-  'NEXT_PUBLIC_SUPABASE_ANON_KEY',
-] as const;
-
+/**
+ * Each variable is read through a full, literal `process.env.NAME`
+ * expression, exactly as the Supabase clients read them.
+ *
+ * This is load-bearing, not style: Next.js substitutes NEXT_PUBLIC_* values
+ * into the bundle at build time, but only for statically analyzable
+ * references. A dynamic `process.env[key]` lookup is left alone and falls
+ * back to whatever the runtime provides — so a dynamic check reports a
+ * variable "missing" even when the client it guards holds a perfectly good
+ * inlined value, and the guard then blocks a working deployment. Reading
+ * them the same way the clients do keeps the check and reality in sync.
+ */
 export function missingSupabaseEnv(): string[] {
-  return REQUIRED_SUPABASE_KEYS.filter((key) => {
-    const value = process.env[key];
-    return !value || value.trim() === '';
-  });
+  const missing: string[] = [];
+
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL?.trim()) {
+    missing.push('NEXT_PUBLIC_SUPABASE_URL');
+  }
+  if (!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.trim()) {
+    missing.push('NEXT_PUBLIC_SUPABASE_ANON_KEY');
+  }
+
+  return missing;
 }
 
 export function isSupabaseConfigured(): boolean {
