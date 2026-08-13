@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
-import { createPublicClient } from '@/lib/supabase/public';
+import { createPublicClient, createPublicClientOrNull } from '@/lib/supabase/public';
 import { fetchGoogleReviews } from '@/lib/google-places';
 import { MenuList } from '@/components/public/MenuList';
 import { MapEmbed } from '@/components/public/MapEmbed';
@@ -32,18 +32,27 @@ interface PageProps {
 // Prerenders every active restaurant at build time. Restaurants added
 // afterwards still work: dynamicParams defaults to true, so an unknown
 // slug is rendered on first request and then cached like the rest.
+//
+// Prerendering is a pure optimization here, so every failure path below
+// degrades to an empty list rather than failing the build — missing
+// build-time credentials or an unreachable database just means pages get
+// rendered on demand instead.
 export async function generateStaticParams() {
-  const supabase = createPublicClient();
-  const { data, error } = await supabase
-    .from('restaurants')
-    .select('slug')
-    .neq('subscription_status', 'canceled');
+  const supabase = createPublicClientOrNull();
+  if (!supabase) return [];
 
-  // A build should never fail because the database was briefly
-  // unreachable — fall back to rendering every page on demand.
-  if (error || !data) return [];
+  try {
+    const { data, error } = await supabase
+      .from('restaurants')
+      .select('slug')
+      .neq('subscription_status', 'canceled');
 
-  return data.map(({ slug }) => ({ slug }));
+    if (error || !data) return [];
+
+    return data.map(({ slug }) => ({ slug }));
+  } catch {
+    return [];
+  }
 }
 
 async function getRestaurantData(slug: string) {
