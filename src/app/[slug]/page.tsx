@@ -1,7 +1,8 @@
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
-import { createPublicClient, createPublicClientOrNull } from '@/lib/supabase/public';
+import { createPublicClientOrNull } from '@/lib/supabase/public';
+import { configErrorMessage, missingSupabaseEnv } from '@/lib/env';
 import { fetchGoogleReviews } from '@/lib/google-places';
 import { MenuList } from '@/components/public/MenuList';
 import { MapEmbed } from '@/components/public/MapEmbed';
@@ -55,8 +56,13 @@ export async function generateStaticParams() {
   }
 }
 
+// Distinguishes "this deployment is misconfigured" from "no such
+// restaurant", so a missing env var doesn't masquerade as a 404.
+const CONFIG_ERROR = { configError: true } as const;
+
 async function getRestaurantData(slug: string) {
-  const supabase = createPublicClient();
+  const supabase = createPublicClientOrNull();
+  if (!supabase) return CONFIG_ERROR;
 
   const { data: restaurant } = await supabase
     .from('restaurants')
@@ -105,6 +111,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { slug } = await params;
   const data = await getRestaurantData(slug);
   if (!data) return { title: 'المطعم غير موجود' };
+  if ('configError' in data) return { title: 'إعدادات الموقع غير مكتملة' };
 
   const { restaurant } = data;
   return {
@@ -123,6 +130,19 @@ export default async function RestaurantPage({ params }: PageProps) {
   const { slug } = await params;
   const data = await getRestaurantData(slug);
   if (!data) notFound();
+
+  // A misconfigured deployment is an operator problem, not a missing page —
+  // say so plainly instead of rendering a misleading 404.
+  if ('configError' in data) {
+    return (
+      <main className="mx-auto flex min-h-screen max-w-xl flex-col justify-center gap-4 px-6 py-16">
+        <h1 className="text-2xl font-bold text-neutral-900">إعدادات الموقع غير مكتملة</h1>
+        <pre className="whitespace-pre-wrap rounded-lg border border-neutral-200 bg-neutral-50 p-4 text-sm leading-relaxed text-neutral-700">
+          {configErrorMessage(missingSupabaseEnv())}
+        </pre>
+      </main>
+    );
+  }
 
   const { restaurant, categories, items, internalReviews, branches } = data;
 
