@@ -1,52 +1,61 @@
 /**
- * Runtime configuration checks.
+ * Supabase configuration lookup, resilient to how the deployment supplies it.
  *
- * Supabase's client constructor throws when its URL/key are missing, which
- * surfaces to visitors as an opaque "Application error ... Digest: <number>"
- * page with nothing actionable in it. Deployments get misconfigured
- * routinely — a variable set on the build step but not the runtime, a typo
- * in a key name — so the app checks first and reports exactly which
- * variables are missing instead of crashing.
+ * Next.js substitutes NEXT_PUBLIC_* values into the bundle at build time,
+ * but only where the reference is statically analyzable. That substitution
+ * is unconditional: if a variable is absent during the build, the expression
+ * is replaced with `undefined` outright, and no value set on the runtime
+ * afterwards is ever consulted. A host that separates build variables from
+ * runtime variables — Cloudflare Workers does — therefore lets you set the
+ * variable in the dashboard, redeploy, and still get nothing.
+ *
+ * So each value is resolved from two sources: the build-time inlined
+ * literal, then the runtime environment. Server code gets a working value
+ * whichever place the operator configured, in either order.
+ *
+ * Browser bundles have no runtime process.env, so the fallback is inert
+ * there and client components still depend on the build-time value.
  */
 
+function resolve(inlined: string | undefined, name: string): string | undefined {
+  // `inlined` is passed in already-substituted by the compiler; the lookup
+  // below stays dynamic on purpose so it survives to runtime.
+  const value = inlined ?? process.env[name];
+  const trimmed = value?.trim();
+  return trimmed ? trimmed : undefined;
+}
+
+export function supabaseUrl(): string | undefined {
+  return resolve(process.env.NEXT_PUBLIC_SUPABASE_URL, 'NEXT_PUBLIC_SUPABASE_URL');
+}
+
+export function supabaseAnonKey(): string | undefined {
+  return resolve(process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY, 'NEXT_PUBLIC_SUPABASE_ANON_KEY');
+}
+
 /**
- * Each variable is read through a full, literal `process.env.NAME`
- * expression, exactly as the Supabase clients read them.
- *
- * This is load-bearing, not style: Next.js substitutes NEXT_PUBLIC_* values
- * into the bundle at build time, but only for statically analyzable
- * references. A dynamic `process.env[key]` lookup is left alone and falls
- * back to whatever the runtime provides — so a dynamic check reports a
- * variable "missing" even when the client it guards holds a perfectly good
- * inlined value, and the guard then blocks a working deployment. Reading
- * them the same way the clients do keeps the check and reality in sync.
+ * Names of the variables that are still unset after both lookups. Callers
+ * report these to the operator rather than letting the Supabase constructor
+ * throw, which reaches visitors as an opaque error digest.
  */
 export function missingSupabaseEnv(): string[] {
   const missing: string[] = [];
-
-  if (!process.env.NEXT_PUBLIC_SUPABASE_URL?.trim()) {
-    missing.push('NEXT_PUBLIC_SUPABASE_URL');
-  }
-  if (!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.trim()) {
-    missing.push('NEXT_PUBLIC_SUPABASE_ANON_KEY');
-  }
-
+  if (!supabaseUrl()) missing.push('NEXT_PUBLIC_SUPABASE_URL');
+  if (!supabaseAnonKey()) missing.push('NEXT_PUBLIC_SUPABASE_ANON_KEY');
   return missing;
-}
-
-export function isSupabaseConfigured(): boolean {
-  return missingSupabaseEnv().length === 0;
 }
 
 export function configErrorMessage(missing: string[]): string {
   return [
     'إعدادات الموقع غير مكتملة.',
     '',
-    'المتغيرات التالية غير مضبوطة على بيئة التشغيل:',
+    'المتغيرات التالية غير مضبوطة:',
     ...missing.map((key) => `  • ${key}`),
     '',
-    'أضفها من لوحة Cloudflare:',
-    'Workers & Pages ← المشروع ← Settings ← Variables and secrets',
-    'ثم أعد النشر (Deploy) لتصل القيم للنسخة المنشورة.',
+    'أضفها من لوحة Cloudflare في المكانين معًا:',
+    '  1) Settings ← Variables and secrets',
+    '  2) Settings ← Build ← Variables and secrets',
+    '',
+    'ثم أعد النشر (Deploy).',
   ].join('\n');
 }

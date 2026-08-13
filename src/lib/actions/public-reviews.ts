@@ -1,7 +1,7 @@
 'use server';
 
 import { z } from 'zod';
-import { createPublicClient } from '@/lib/supabase/public';
+import { createPublicClientOrNull } from '@/lib/supabase/public';
 import { reviewSchema } from '@/lib/validation';
 import { ACTION_OK, actionError, type ActionResult } from './types';
 
@@ -29,7 +29,8 @@ export async function submitReview(formData: FormData): Promise<ActionResult> {
     return actionError('تحقق من الحقول المدخلة', fieldErrors);
   }
 
-  const supabase = createPublicClient();
+  const supabase = createPublicClientOrNull();
+  if (!supabase) return actionError('تعذّر إرسال التقييم. حاول مرة أخرى.');
   const { error } = await supabase.from('reviews').insert({
     restaurant_id: restaurantId.data,
     customer_name: parsed.data.customer_name,

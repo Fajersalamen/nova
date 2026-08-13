@@ -1,4 +1,5 @@
 import { createClient as createSupabaseClient } from '@supabase/supabase-js';
+import { supabaseAnonKey, supabaseUrl } from '@/lib/env';
 import type { Database } from '@/types/database.types';
 
 /**
@@ -8,28 +9,16 @@ import type { Database } from '@/types/database.types';
  * route out of static rendering and forces per-request SSR — exactly what
  * the ISR setup is meant to avoid. Public pages need no session anyway:
  * RLS grants anon read access to menus and approved reviews.
- */
-export function createPublicClient() {
-  return createSupabaseClient<Database>(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    { auth: { persistSession: false } },
-  );
-}
-
-/**
- * Same client, but returns null instead of throwing when the credentials
- * are missing or malformed.
  *
- * Build-time code (generateStaticParams) must not depend on the database
- * being reachable: CI environments don't always carry the runtime env
- * vars, and a deploy pipeline should never break because a build machine
- * couldn't talk to Postgres. Callers treat null as "skip prerendering"
- * and let the pages render on demand instead.
+ * Returns null instead of throwing when the credentials are missing or
+ * malformed, for two reasons: build-time code (generateStaticParams) must
+ * not fail a deploy just because the build machine can't reach the
+ * database, and a misconfigured runtime should report the problem rather
+ * than surface an opaque error digest to visitors.
  */
 export function createPublicClientOrNull() {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  const url = supabaseUrl();
+  const anonKey = supabaseAnonKey();
 
   if (!url || !anonKey) return null;
   if (!/^https?:\/\//.test(url)) return null;
