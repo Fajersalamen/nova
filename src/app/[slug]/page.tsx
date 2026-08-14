@@ -11,6 +11,9 @@ import { CallButton } from '@/components/public/CallButton';
 import { ReviewsSection } from '@/components/public/ReviewsSection';
 import { ReviewForm } from '@/components/public/ReviewForm';
 import { BranchesSection } from '@/components/public/BranchesSection';
+import { SiteHeader } from '@/components/public/SiteHeader';
+import { SiteFooter } from '@/components/public/SiteFooter';
+import { FeatureStrip } from '@/components/public/FeatureStrip';
 import type {
   MenuCategory,
   MenuItem,
@@ -152,101 +155,117 @@ export default async function RestaurantPage({ params }: PageProps) {
     ? await fetchGoogleReviews(restaurant.google_place_id)
     : { reviews: [], averageRating: null, totalRatings: null };
 
+  const hasMenu = items.length > 0;
+  const hasReviews = google.reviews.length > 0 || internalReviews.length > 0;
+  const hasMap = Boolean(restaurant.google_maps_embed_url);
+
+  // First photographed dish stands in for a hero shot — never a stock
+  // image, since we only show media the restaurant actually uploaded.
+  const heroImage = items.find((item) => item.image_url)?.image_url ?? null;
+
   return (
     <>
-      <div className="relative overflow-hidden bg-gradient-to-b from-brand-600 via-brand-500 to-brand-600 pb-14 pt-12 text-white sm:pb-20 sm:pt-16">
-        <div className="mx-auto flex max-w-6xl flex-col items-center gap-4 px-4 text-center sm:px-6">
-          {restaurant.logo_url ? (
-            <Image
-              src={restaurant.logo_url}
-              alt={restaurant.name}
-              width={112}
-              height={112}
-              priority
-              className="h-28 w-28 rounded-full border-4 border-white/80 object-cover shadow-lg"
-            />
-          ) : (
-            <div
-              aria-hidden="true"
-              className="flex h-28 w-28 items-center justify-center rounded-full border-4 border-white/80 bg-white/10 text-4xl font-bold shadow-lg"
-            >
-              {restaurant.name.charAt(0)}
+      <SiteHeader
+        restaurantName={restaurant.name}
+        logoUrl={restaurant.logo_url}
+        address={restaurant.address}
+        phoneWhatsapp={restaurant.phone_whatsapp}
+        hasMenu={hasMenu}
+        hasReviews={hasReviews}
+        hasMap={hasMap}
+      />
+
+      <div className="bg-cream">
+        <section id="hero" className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-16">
+          <div className={`grid items-center gap-10 ${heroImage ? 'lg:grid-cols-2' : ''}`}>
+            <div className="space-y-6 text-center lg:text-right">
+              <span className="inline-block rounded-full bg-brand-600/10 px-4 py-1.5 text-sm font-semibold text-brand-700">
+                {restaurant.name}
+              </span>
+              <h1 className="text-4xl font-bold tracking-tight text-ink sm:text-5xl">
+                {restaurant.name}
+              </h1>
+              {restaurant.address && (
+                <p className="text-lg text-neutral-600">{restaurant.address}</p>
+              )}
+              <div className="flex flex-wrap justify-center gap-3 lg:justify-start">
+                <WhatsAppButton
+                  phoneWhatsapp={restaurant.phone_whatsapp}
+                  restaurantName={restaurant.name}
+                />
+                <CallButton
+                  phone={restaurant.phone_whatsapp}
+                  className="inline-flex items-center gap-2 rounded-full border border-brand-600 px-6 py-3 font-semibold text-brand-700 transition hover:bg-brand-600 hover:text-white"
+                />
+              </div>
             </div>
-          )}
-          <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">{restaurant.name}</h1>
-          {restaurant.address && <p className="text-white/90">{restaurant.address}</p>}
-          <div className="mt-2 flex flex-wrap justify-center gap-3">
-            <WhatsAppButton
-              phoneWhatsapp={restaurant.phone_whatsapp}
-              restaurantName={restaurant.name}
-            />
-            <CallButton
-              phone={restaurant.phone_whatsapp}
-              className="inline-flex items-center gap-2 rounded-full border border-white/70 bg-white/10 px-6 py-3 font-semibold text-white backdrop-blur transition hover:bg-white/20"
-            />
+
+            {heroImage && (
+              <div className="relative mx-auto aspect-[4/3] w-full max-w-md overflow-hidden rounded-2xl shadow-xl">
+                <Image
+                  src={heroImage}
+                  alt={restaurant.name}
+                  fill
+                  priority
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                  className="object-cover"
+                />
+              </div>
+            )}
           </div>
-        </div>
+        </section>
+
+        <FeatureStrip branchCount={branches.length} />
+
+        <main className="mx-auto max-w-6xl px-4 pb-28 pt-12 sm:px-6 sm:pb-16">
+          <div className="space-y-14">
+            {hasMenu && (
+              <section aria-labelledby="menu-heading" className="space-y-8">
+                <h2 id="menu-heading" className="sr-only">
+                  المنيو
+                </h2>
+                <MenuList
+                  categories={categories}
+                  items={items}
+                  restaurantName={restaurant.name}
+                  phoneWhatsapp={restaurant.phone_whatsapp}
+                />
+              </section>
+            )}
+
+            <div id="reviews-heading" className="space-y-6">
+              <ReviewsSection
+                googleReviews={google.reviews}
+                googleAverage={google.averageRating}
+                googleTotal={google.totalRatings}
+                internalReviews={internalReviews}
+              />
+              {/* Google-linked restaurants collect reviews on Google itself,
+                  so the in-site form is only shown for the internal system. */}
+              {!restaurant.google_place_id && <ReviewForm restaurantId={restaurant.id} />}
+            </div>
+
+            {restaurant.google_maps_embed_url && (
+              <div id="map-heading">
+                <MapEmbed
+                  embedUrl={restaurant.google_maps_embed_url}
+                  restaurantName={restaurant.name}
+                />
+              </div>
+            )}
+
+            <BranchesSection branches={branches} restaurantName={restaurant.name} />
+          </div>
+        </main>
       </div>
 
-      {categories.length > 0 && (
-        <nav
-          aria-label="فئات المنيو"
-          className="sticky top-0 z-10 border-b border-neutral-200 bg-white/95 backdrop-blur"
-        >
-          <div className="mx-auto flex max-w-6xl gap-2 overflow-x-auto px-4 py-3 sm:px-6">
-            {categories.map((category) => (
-              <a
-                key={category.id}
-                href={`#category-${category.id}`}
-                className="shrink-0 rounded-full border border-neutral-200 px-4 py-1.5 text-sm font-medium text-neutral-700 transition hover:border-brand-400 hover:text-brand-700"
-              >
-                {category.name}
-              </a>
-            ))}
-          </div>
-        </nav>
-      )}
-
-      <main className="mx-auto max-w-6xl px-4 pb-28 pt-10 sm:px-6 sm:pb-10">
-        <div className="space-y-14">
-          <section aria-labelledby="menu-heading" className="space-y-8">
-            <h2 id="menu-heading" className="sr-only">
-              المنيو
-            </h2>
-            <MenuList
-              categories={categories}
-              items={items}
-              restaurantName={restaurant.name}
-              phoneWhatsapp={restaurant.phone_whatsapp}
-            />
-          </section>
-
-          <div className="space-y-6">
-            <ReviewsSection
-              googleReviews={google.reviews}
-              googleAverage={google.averageRating}
-              googleTotal={google.totalRatings}
-              internalReviews={internalReviews}
-            />
-            {/* Google-linked restaurants collect reviews on Google itself,
-                so the in-site form is only shown for the internal system. */}
-            {!restaurant.google_place_id && <ReviewForm restaurantId={restaurant.id} />}
-          </div>
-
-          {restaurant.google_maps_embed_url && (
-            <MapEmbed
-              embedUrl={restaurant.google_maps_embed_url}
-              restaurantName={restaurant.name}
-            />
-          )}
-
-          <BranchesSection branches={branches} restaurantName={restaurant.name} />
-        </div>
-
-        <footer className="mt-16 border-t border-neutral-200 pt-6 text-center text-sm text-neutral-500">
-          © {new Date().getFullYear()} {restaurant.name}
-        </footer>
-      </main>
+      <SiteFooter
+        restaurantName={restaurant.name}
+        address={restaurant.address}
+        phoneWhatsapp={restaurant.phone_whatsapp}
+        hasMenu={hasMenu}
+        hasMap={hasMap}
+      />
 
       {/* Always-reachable contact bar on mobile, where scrolling the hero
           buttons out of view would otherwise cost a real order. */}

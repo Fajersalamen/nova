@@ -26,6 +26,18 @@ const config: Config = {
           500: '#f59e0b',
           600: '#d97706',
         },
+        // Warm cream page background and near-black footer ink, used
+        // instead of plain white/black for a less generic, more
+        // restaurant-menu-card feel.
+        cream: {
+          DEFAULT: '#faf3e0',
+          100: '#fdf9ef',
+          200: '#f5ecd0',
+        },
+        ink: {
+          DEFAULT: '#211a14',
+          800: '#2b2119',
+        },
       },
     },
   },

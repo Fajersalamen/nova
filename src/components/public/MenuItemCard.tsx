@@ -11,34 +11,49 @@ interface Props {
 }
 
 export function MenuItemCard({ item, restaurantName, phoneWhatsapp }: Props) {
+  const hasMedia = Boolean(item.image_url || item.video_url);
+
+  // Items with a photo get the full image-forward card; text-only items
+  // (a very common case — drinks, extras, sides) get a compact list row
+  // instead of an oversized card with a placeholder box.
+  if (!hasMedia) {
+    return (
+      <article className="flex items-center justify-between gap-4 rounded-xl border border-neutral-200 bg-white p-4 shadow-sm transition hover:border-brand-300">
+        <div className="min-w-0 flex-1">
+          <h3 className="font-semibold text-neutral-900">{item.name}</h3>
+          {item.description && (
+            <p className="mt-0.5 truncate text-sm text-neutral-600">{item.description}</p>
+          )}
+        </div>
+        <span className="shrink-0 rounded-full bg-accent-400 px-3 py-1.5 text-sm font-bold text-brand-900">
+          {formatPrice(item.price)}
+        </span>
+      </article>
+    );
+  }
+
   return (
     <article className="flex flex-col overflow-hidden rounded-xl border border-neutral-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
-      {(item.image_url || item.video_url) && (
-        // Explicit aspect ratio reserves the space before media loads,
-        // which keeps CLS at zero.
-        <div className="relative aspect-[4/3] w-full bg-neutral-100">
-          {item.image_url && (
-            <Image
-              src={item.image_url}
-              alt={item.name}
-              fill
-              sizes="(max-width: 768px) 100vw, 33vw"
-              className="object-cover"
-            />
-          )}
-          {item.video_url && (
-            <LazyVideo src={item.video_url} poster={item.image_url} label={item.name} />
-          )}
-        </div>
-      )}
+      <div className="relative aspect-[4/3] w-full bg-neutral-100">
+        {item.image_url && (
+          <Image
+            src={item.image_url}
+            alt={item.name}
+            fill
+            sizes="(max-width: 768px) 100vw, 33vw"
+            className="object-cover"
+          />
+        )}
+        {item.video_url && (
+          <LazyVideo src={item.video_url} poster={item.image_url} label={item.name} />
+        )}
+        <span className="absolute bottom-3 left-3 rounded-full bg-accent-400 px-3 py-1.5 text-sm font-bold text-brand-900 shadow">
+          {formatPrice(item.price)}
+        </span>
+      </div>
 
       <div className="flex flex-1 flex-col gap-2 p-4">
-        <div className="flex items-start justify-between gap-3">
-          <h3 className="font-semibold text-neutral-900">{item.name}</h3>
-          <span className="shrink-0 rounded-full bg-brand-50 px-2.5 py-1 text-sm font-bold text-brand-700">
-            {formatPrice(item.price)}
-          </span>
-        </div>
+        <h3 className="font-semibold text-neutral-900">{item.name}</h3>
 
         {item.description && (
           <p className="text-sm leading-relaxed text-neutral-600">{item.description}</p>
