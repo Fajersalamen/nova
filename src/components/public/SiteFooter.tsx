@@ -1,71 +1,123 @@
-import { CallButton } from './CallButton';
+import Image from 'next/image';
+import Link from 'next/link';
+import { Clock, MapPin, Phone } from 'lucide-react';
 
 interface Props {
+  slug: string;
   restaurantName: string;
+  logoUrl: string | null;
   address: string | null;
   phone: string;
-  hasMenu: boolean;
-  hasMap: boolean;
+  hoursLabel: string | null;
+  mapsUrl: string | null;
 }
 
-export function SiteFooter({ restaurantName, address, phone, hasMenu, hasMap }: Props) {
+export function SiteFooter({
+  slug,
+  restaurantName,
+  logoUrl,
+  address,
+  phone,
+  hoursLabel,
+  mapsUrl,
+}: Props) {
   return (
-    <footer className="bg-ink text-white">
-      <div className="mx-auto max-w-6xl px-4 py-12 text-center sm:px-6">
-        <h2 className="text-2xl font-bold text-accent-400 sm:text-3xl">جاهز تطلب؟ اتصل فينا.</h2>
-        <div className="mt-5 flex justify-center">
-          <CallButton
-            phone={phone}
-            className="inline-flex items-center gap-2 rounded-full bg-brand-600 px-8 py-3 font-semibold text-white transition hover:bg-brand-700"
-          />
-        </div>
-      </div>
-
-      <div className="border-t border-white/10">
-        <div className="mx-auto grid max-w-6xl gap-8 px-4 py-10 text-center sm:grid-cols-3 sm:px-6 sm:text-right">
-          <div>
-            <h3 className="mb-3 font-bold text-accent-400">تواصل معنا</h3>
-            <ul className="space-y-2 text-sm text-white/80">
-              <li dir="ltr" className="text-center sm:text-right">
-                {phone}
-              </li>
-              {address && <li>{address}</li>}
-            </ul>
+    <footer className="bg-ink text-cream">
+      <div className="mx-auto grid max-w-6xl gap-10 px-4 py-14 md:grid-cols-3">
+        <div>
+          <div className="flex items-center gap-3">
+            {logoUrl ? (
+              <Image
+                src={logoUrl}
+                alt={`شعار ${restaurantName}`}
+                width={64}
+                height={64}
+                className="h-16 w-auto"
+              />
+            ) : (
+              <div
+                aria-hidden="true"
+                className="flex h-16 w-16 items-center justify-center rounded-full border-2 border-white/20 bg-white/10 text-xl font-bold"
+              >
+                {restaurantName.charAt(0)}
+              </div>
+            )}
+            <span className="block text-sm font-bold">{restaurantName}</span>
           </div>
+        </div>
 
-          <div>
-            <h3 className="mb-3 font-bold text-accent-400">روابط سريعة</h3>
-            <ul className="space-y-2 text-sm text-white/80">
+        <nav aria-label="روابط سريعة">
+          <h3 className="mb-4 text-sm font-black tracking-wide text-accent-400">روابط سريعة</h3>
+          <ul className="space-y-2 text-sm font-bold">
+            <li>
+              <Link href={`/${slug}`} className="opacity-80 transition-opacity hover:opacity-100">
+                الرئيسية
+              </Link>
+            </li>
+            <li>
+              <Link href={`/${slug}/menu`} className="opacity-80 transition-opacity hover:opacity-100">
+                القائمة
+              </Link>
+            </li>
+            <li>
+              <Link href={`/${slug}/about`} className="opacity-80 transition-opacity hover:opacity-100">
+                من نحن
+              </Link>
+            </li>
+            <li>
+              <Link
+                href={`/${slug}/contact`}
+                className="opacity-80 transition-opacity hover:opacity-100"
+              >
+                اتصل بنا
+              </Link>
+            </li>
+          </ul>
+        </nav>
+
+        <div>
+          <h3 className="mb-4 text-sm font-black tracking-wide text-accent-400">تواصل معنا</h3>
+          <ul className="space-y-3 text-sm font-bold">
+            <li>
+              <a
+                href={`tel:${phone.replace(/[^\d+]/g, '')}`}
+                className="flex items-center gap-2 opacity-80 transition-opacity hover:opacity-100"
+              >
+                <Phone className="h-4 w-4 text-accent-400" aria-hidden />
+                <span dir="ltr">{phone}</span>
+              </a>
+            </li>
+            {address && (
               <li>
-                <a href="#hero" className="transition hover:text-white">
-                  الرئيسية
-                </a>
+                {mapsUrl ? (
+                  <a
+                    href={mapsUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 opacity-80 transition-opacity hover:opacity-100"
+                  >
+                    <MapPin className="h-4 w-4 shrink-0 text-accent-400" aria-hidden />
+                    {address}
+                  </a>
+                ) : (
+                  <span className="flex items-center gap-2 opacity-80">
+                    <MapPin className="h-4 w-4 shrink-0 text-accent-400" aria-hidden />
+                    {address}
+                  </span>
+                )}
               </li>
-              {hasMenu && (
-                <li>
-                  <a href="#menu-heading" className="transition hover:text-white">
-                    القائمة
-                  </a>
-                </li>
-              )}
-              {hasMap && (
-                <li>
-                  <a href="#map-heading" className="transition hover:text-white">
-                    موقعنا
-                  </a>
-                </li>
-              )}
-            </ul>
-          </div>
-
-          <div className="text-sm text-white/70 sm:text-right">
-            <p className="text-lg font-bold text-accent-400">{restaurantName}</p>
-            <p className="mt-2">موقعك على منصة نوفا لمواقع المطاعم.</p>
-          </div>
+            )}
+            {hoursLabel && (
+              <li className="flex items-center gap-2 opacity-80">
+                <Clock className="h-4 w-4 text-accent-400" aria-hidden />
+                {hoursLabel}
+              </li>
+            )}
+          </ul>
         </div>
       </div>
 
-      <div className="border-t border-white/10 py-4 text-center text-xs text-white/50">
+      <div className="border-t border-cream/10 py-5 text-center text-xs font-bold opacity-70">
         © {new Date().getFullYear()} {restaurantName}. جميع الحقوق محفوظة.
       </div>
     </footer>

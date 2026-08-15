@@ -46,7 +46,7 @@ export async function createBranch(formData: FormData): Promise<ActionResult> {
 
   if (error) return actionError('تعذّر إضافة الفرع. حاول مرة أخرى.');
 
-  revalidatePath(`/${session.restaurant.slug}`);
+  revalidatePath(`/${session.restaurant.slug}`, 'layout');
   revalidatePath('/admin/branches');
   return ACTION_OK;
 }
@@ -77,7 +77,7 @@ export async function updateBranch(formData: FormData): Promise<ActionResult> {
 
   if (error) return actionError('تعذّر تعديل الفرع.');
 
-  revalidatePath(`/${session.restaurant.slug}`);
+  revalidatePath(`/${session.restaurant.slug}`, 'layout');
   revalidatePath('/admin/branches');
   return ACTION_OK;
 }
@@ -97,7 +97,7 @@ export async function deleteBranch(formData: FormData): Promise<ActionResult> {
 
   if (error) return actionError('تعذّر حذف الفرع.');
 
-  revalidatePath(`/${session.restaurant.slug}`);
+  revalidatePath(`/${session.restaurant.slug}`, 'layout');
   revalidatePath('/admin/branches');
   return ACTION_OK;
 }

@@ -35,10 +35,10 @@ export function ReviewForm({ restaurantId }: Props) {
   return (
     <form
       action={handleSubmit}
-      className="space-y-4 rounded-xl border border-neutral-200 bg-neutral-50 p-5"
+      className="space-y-4 rounded-3xl border border-border bg-white p-8 shadow-sm"
     >
       <input type="hidden" name="restaurant_id" value={restaurantId} />
-      <h3 className="font-semibold text-neutral-900">شاركنا رأيك</h3>
+      <h3 className="text-2xl font-black text-ink">شاركنا رأيك</h3>
 
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="space-y-1">

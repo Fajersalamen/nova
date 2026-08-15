@@ -1,8 +1,11 @@
+import { Clock, MapPin, Navigation, Phone } from 'lucide-react';
+
 interface Props {
   embedUrl: string;
   restaurantName: string;
   address: string | null;
   phone: string;
+  hoursLabel: string | null;
 }
 
 /**
@@ -10,15 +13,60 @@ interface Props {
  * pulls ~300kb+ of JS and blocks rendering, while a lazy iframe costs
  * nothing until it scrolls into view.
  */
-export function MapEmbed({ embedUrl, restaurantName, address, phone }: Props) {
+export function MapEmbed({ embedUrl, restaurantName, address, phone, hoursLabel }: Props) {
   const directionsUrl = address
     ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`
     : null;
 
   return (
-    <section aria-labelledby="map-heading" className="bg-ink text-white">
-      <div className="mx-auto grid max-w-6xl items-center gap-8 px-4 py-14 sm:px-6 lg:grid-cols-2">
-        <div className="overflow-hidden rounded-2xl border border-white/10">
+    <section aria-labelledby="map-heading" className="bg-secondary-600 text-white">
+      <div className="mx-auto grid max-w-6xl items-center gap-12 px-4 py-20 lg:grid-cols-2">
+        <div>
+          <p className="flex items-center gap-2 text-sm font-black text-accent-400">
+            <MapPin className="h-4 w-4" aria-hidden />
+            موقعنا
+          </p>
+          <h2 id="map-heading" className="mt-2 text-4xl font-black tracking-tight sm:text-5xl">
+            {restaurantName}
+          </h2>
+          <ul className="mt-8 space-y-4 text-base font-bold">
+            {address && (
+              <li className="flex items-center gap-3">
+                <MapPin className="h-5 w-5 shrink-0 text-accent-400" aria-hidden />
+                {address}
+              </li>
+            )}
+            {hoursLabel && (
+              <li className="flex items-center gap-3">
+                <Clock className="h-5 w-5 shrink-0 text-accent-400" aria-hidden />
+                {hoursLabel}
+              </li>
+            )}
+            <li className="flex items-center gap-3">
+              <Phone className="h-5 w-5 shrink-0 text-accent-400" aria-hidden />
+              <a
+                href={`tel:${phone.replace(/[^\d+]/g, '')}`}
+                className="underline-offset-4 hover:underline"
+                dir="ltr"
+              >
+                {phone}
+              </a>
+            </li>
+          </ul>
+          {directionsUrl && (
+            <a
+              href={directionsUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-8 inline-flex items-center gap-2 rounded-full bg-accent-400 px-8 py-3.5 text-base font-black text-accent-900 shadow-lg transition-transform hover:scale-105"
+            >
+              <Navigation className="h-5 w-5" aria-hidden />
+              احصل على الاتجاهات
+            </a>
+          )}
+        </div>
+
+        <div className="overflow-hidden rounded-3xl border-4 border-accent-400 shadow-2xl">
           <iframe
             src={embedUrl}
             title={`خريطة موقع ${restaurantName}`}
@@ -27,26 +75,6 @@ export function MapEmbed({ embedUrl, restaurantName, address, phone }: Props) {
             allowFullScreen
             className="h-[340px] w-full border-0"
           />
-        </div>
-
-        <div className="space-y-4 text-center lg:text-right">
-          <span className="text-sm font-semibold text-accent-400">موقعنا</span>
-          <h2 id="map-heading" className="text-3xl font-bold sm:text-4xl">
-            {address ?? restaurantName}
-          </h2>
-          <p dir="ltr" className="text-white/80">
-            {phone}
-          </p>
-          {directionsUrl && (
-            <a
-              href={directionsUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-full bg-accent-400 px-6 py-3 font-semibold text-brand-900 transition hover:bg-accent-500"
-            >
-              احصل على الاتجاهات
-            </a>
-          )}
         </div>
       </div>
     </section>

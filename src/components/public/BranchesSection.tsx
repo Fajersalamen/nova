@@ -1,4 +1,4 @@
-import { CallButton } from './CallButton';
+import { MapPin, Phone } from 'lucide-react';
 import type { RestaurantBranch } from '@/types/database.types';
 
 interface Props {
@@ -9,27 +9,34 @@ export function BranchesSection({ branches }: Props) {
   if (branches.length === 0) return null;
 
   return (
-    <section className="space-y-6" aria-labelledby="branches-heading">
-      <h2
-        id="branches-heading"
-        className="border-b border-neutral-200 pb-2 text-2xl font-bold text-neutral-900"
-      >
+    <section aria-labelledby="branches-heading" className="mx-auto max-w-6xl px-4 pb-20">
+      <h2 id="branches-heading" className="mb-8 text-3xl font-black tracking-tight text-ink">
         فروعنا
       </h2>
 
       <div className="grid gap-8 sm:grid-cols-2">
         {branches.map((branch) => (
-          <article key={branch.id} className="space-y-3 rounded-xl border border-neutral-200 p-4">
-            <h3 className="font-semibold text-neutral-900">{branch.name}</h3>
-            {branch.address && <p className="text-sm text-neutral-600">{branch.address}</p>}
-
-            <CallButton
-              phone={branch.phone_whatsapp}
-              className="inline-flex items-center gap-2 rounded-full bg-brand-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-brand-700"
-            />
+          <article
+            key={branch.id}
+            className="space-y-4 rounded-3xl border border-border bg-white p-8 shadow-sm"
+          >
+            <h3 className="text-xl font-black text-ink">{branch.name}</h3>
+            {branch.address && (
+              <p className="flex items-center gap-2 text-sm font-semibold text-neutral-600">
+                <MapPin className="h-4 w-4 shrink-0 text-brand-600" aria-hidden />
+                {branch.address}
+              </p>
+            )}
+            <a
+              href={`tel:${branch.phone_whatsapp.replace(/[^\d+]/g, '')}`}
+              className="inline-flex items-center gap-2 rounded-full bg-brand-600 px-5 py-2.5 text-sm font-black text-white transition-transform hover:scale-105"
+            >
+              <Phone className="h-4 w-4" aria-hidden />
+              <span dir="ltr">{branch.phone_whatsapp}</span>
+            </a>
 
             {branch.google_maps_embed_url && (
-              <div className="overflow-hidden rounded-lg border border-neutral-200">
+              <div className="overflow-hidden rounded-2xl border border-border">
                 <iframe
                   src={branch.google_maps_embed_url}
                   title={`خريطة ${branch.name}`}

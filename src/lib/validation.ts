@@ -14,6 +14,8 @@ export const menuItemSchema = z.object({
   video_url: z.string().url().optional().or(z.literal('')),
   is_available: z.coerce.boolean().default(true),
   display_order: z.coerce.number().int().default(0),
+  tag: z.string().trim().max(40).optional().or(z.literal('')),
+  is_featured: z.coerce.boolean().default(false),
 });
 
 export const restaurantSettingsSchema = z.object({
@@ -31,6 +33,15 @@ export const restaurantSettingsSchema = z.object({
     .or(z.literal('')),
   google_place_id: z.string().trim().max(200).optional().or(z.literal('')),
   logo_url: z.string().url().optional().or(z.literal('')),
+  tagline: z.string().trim().max(120).optional().or(z.literal('')),
+  hero_description: z.string().trim().max(300).optional().or(z.literal('')),
+  hours_label: z.string().trim().max(80).optional().or(z.literal('')),
+  has_dine_in: z.coerce.boolean().default(true),
+  has_delivery: z.coerce.boolean().default(false),
+  has_drive_thru: z.coerce.boolean().default(false),
+  about_title: z.string().trim().max(120).optional().or(z.literal('')),
+  about_body: z.string().trim().max(4000).optional().or(z.literal('')),
+  about_image_url: z.string().url().optional().or(z.literal('')),
 });
 
 export const branchSchema = z.object({

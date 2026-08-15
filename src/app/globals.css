@@ -13,3 +13,16 @@ html {
 body {
   @apply overflow-x-hidden bg-white text-neutral-900 antialiased;
 }
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 45s linear infinite;
+}

@@ -85,6 +85,17 @@ export function MenuItemForm({
             className="w-full rounded-md border border-neutral-300 px-3 py-2 outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500"
           />
         </div>
+
+        <div className="space-y-1">
+          <label className="block text-sm font-medium text-neutral-700">شارة (اختياري)</label>
+          <input
+            name="tag"
+            maxLength={40}
+            defaultValue={item?.tag ?? ''}
+            placeholder="مثال: الأكثر طلبًا، حار"
+            className="w-full rounded-md border border-neutral-300 px-3 py-2 outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500"
+          />
+        </div>
       </div>
 
       <div className="space-y-1">
@@ -123,6 +134,16 @@ export function MenuItemForm({
           className="h-4 w-4 rounded border-neutral-300"
         />
         متوفر حاليًا (يظهر على الموقع)
+      </label>
+
+      <label className="flex items-center gap-2 text-sm text-neutral-700">
+        <input
+          type="checkbox"
+          name="is_featured"
+          defaultChecked={item?.is_featured ?? false}
+          className="h-4 w-4 rounded border-neutral-300"
+        />
+        عرضه ضمن &quot;الأكثر طلبًا&quot; بالصفحة الرئيسية
       </label>
 
       <div className="flex gap-3">

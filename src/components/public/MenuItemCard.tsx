@@ -1,70 +1,66 @@
 import Image from 'next/image';
 import { LazyVideo } from './LazyVideo';
-import { CallButton } from './CallButton';
 import { formatPrice } from '@/lib/utils';
 import type { MenuItem } from '@/types/database.types';
 
 interface Props {
   item: MenuItem;
-  phone: string;
 }
 
-export function MenuItemCard({ item, phone }: Props) {
-  const hasMedia = Boolean(item.image_url || item.video_url);
-
-  // Items with a photo get the full image-forward card; text-only items
-  // (a very common case — drinks, extras, sides) get a compact list row
-  // instead of an oversized card with a placeholder box.
-  if (!hasMedia) {
-    return (
-      <article className="flex items-center justify-between gap-4 rounded-xl border border-neutral-200 bg-white p-4 shadow-sm transition hover:border-brand-300">
-        <div className="min-w-0 flex-1">
-          <h3 className="font-semibold text-neutral-900">{item.name}</h3>
-          {item.description && (
-            <p className="mt-0.5 truncate text-sm text-neutral-600">{item.description}</p>
-          )}
-        </div>
-        <span className="shrink-0 rounded-full bg-accent-400 px-3 py-1.5 text-sm font-bold text-brand-900">
-          {formatPrice(item.price)}
-        </span>
-      </article>
-    );
-  }
-
+export function MenuItemCard({ item }: Props) {
   return (
-    <article className="flex flex-col overflow-hidden rounded-xl border border-neutral-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
-      <div className="relative aspect-[4/3] w-full bg-neutral-100">
+    <article className="group overflow-hidden rounded-3xl border border-border bg-white shadow-sm transition-shadow hover:shadow-xl">
+      <div className="relative overflow-hidden">
         {item.image_url && (
           <Image
             src={item.image_url}
             alt={item.name}
-            fill
+            width={800}
+            height={800}
             sizes="(max-width: 768px) 100vw, 33vw"
-            className="object-cover"
+            className="aspect-square w-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
         )}
         {item.video_url && (
-          <LazyVideo src={item.video_url} poster={item.image_url} label={item.name} />
+          <div className="aspect-square w-full">
+            <LazyVideo src={item.video_url} poster={item.image_url} label={item.name} />
+          </div>
         )}
-        <span className="absolute bottom-3 left-3 rounded-full bg-accent-400 px-3 py-1.5 text-sm font-bold text-brand-900 shadow">
-          {formatPrice(item.price)}
-        </span>
+        {item.tag && (
+          <span className="absolute right-4 top-4 rounded-full bg-brand-600 px-3 py-1 text-xs font-black text-white shadow">
+            {item.tag}
+          </span>
+        )}
       </div>
-
-      <div className="flex flex-1 flex-col gap-2 p-4">
-        <h3 className="font-semibold text-neutral-900">{item.name}</h3>
-
-        {item.description && (
-          <p className="text-sm leading-relaxed text-neutral-600">{item.description}</p>
-        )}
-
-        <div className="mt-auto pt-3">
-          <CallButton
-            phone={phone}
-            className="inline-flex w-full items-center justify-center gap-2 rounded-md bg-brand-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-brand-700"
-          />
+      <div className="p-6">
+        <div className="flex items-center justify-between gap-3">
+          <h3 className="text-xl font-black text-ink">{item.name}</h3>
+          <span className="shrink-0 rounded-full bg-accent-400 px-3 py-1 text-sm font-black text-accent-900">
+            {formatPrice(item.price)}
+          </span>
         </div>
+        {item.description && (
+          <p className="mt-2 text-sm font-semibold leading-relaxed text-neutral-600">
+            {item.description}
+          </p>
+        )}
       </div>
     </article>
+  );
+}
+
+export function MenuItemRow({ item }: { item: MenuItem }) {
+  return (
+    <li className="flex items-center justify-between gap-4 px-6 py-4">
+      <div>
+        <h3 className="font-black text-ink">{item.name}</h3>
+        {item.description && (
+          <p className="text-sm font-semibold text-neutral-600">{item.description}</p>
+        )}
+      </div>
+      <span className="shrink-0 rounded-full bg-accent-400 px-3 py-1 text-sm font-black text-accent-900">
+        {formatPrice(item.price)}
+      </span>
+    </li>
   );
 }

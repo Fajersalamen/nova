@@ -5,39 +5,38 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // Warm red/orange scale — brand-neutral default tuned for the
-        // restaurant vertical (matches the red/orange signage most
-        // Jordanian food brands already use), swap per-tenant via
-        // theme_settings later if needed.
+        // Exact palette from the restaurant's approved reference design
+        // (converted from its OKLCH tokens) — not a generic default.
         brand: {
-          50: '#fef2f0',
-          100: '#fde3de',
-          200: '#fbc7bd',
-          300: '#f7a394',
-          400: '#f2735d',
-          500: '#e8432a',
-          600: '#cc2e17',
-          700: '#a82412',
-          800: '#841d10',
-          900: '#5e150c',
+          400: '#e6474a',
+          500: '#d9302f',
+          600: '#d21718',
+          700: '#ac1314',
+          900: '#5f0a0b',
         },
         accent: {
-          400: '#ffb020',
-          500: '#f59e0b',
-          600: '#d97706',
+          400: '#fdd137',
+          500: '#dfb830',
+          900: '#411e0d',
         },
-        // Warm cream page background and near-black footer ink, used
-        // instead of plain white/black for a less generic, more
-        // restaurant-menu-card feel.
+        secondary: {
+          600: '#174eba',
+          700: '#134099',
+        },
         cream: {
-          DEFAULT: '#faf3e0',
+          DEFAULT: '#fbf3df',
           100: '#fdf9ef',
-          200: '#f5ecd0',
+          200: '#ede5d8',
         },
         ink: {
-          DEFAULT: '#211a14',
-          800: '#2b2119',
+          DEFAULT: '#1e1613',
+          800: '#211815',
         },
+        open: '#43c251',
+      },
+      fontFamily: {
+        sans: ['var(--font-sans)', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        display: ['var(--font-display)', 'var(--font-sans)', 'sans-serif'],
       },
     },
   },

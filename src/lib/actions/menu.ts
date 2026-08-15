@@ -20,7 +20,7 @@ function collectFieldErrors(error: z.ZodError): Record<string, string> {
 // changes so admins see their edit live instead of waiting out the ISR
 // window.
 function refreshPublicPage(slug: string) {
-  revalidatePath(`/${slug}`);
+  revalidatePath(`/${slug}`, 'layout');
   revalidatePath('/admin/menu');
 }
 
@@ -106,6 +106,8 @@ function parseMenuItemForm(formData: FormData) {
     video_url: formData.get('video_url') ?? '',
     is_available: formData.get('is_available') === 'on' || formData.get('is_available') === 'true',
     display_order: formData.get('display_order') ?? 0,
+    tag: formData.get('tag') ?? '',
+    is_featured: formData.get('is_featured') === 'on' || formData.get('is_featured') === 'true',
   });
 }
 
@@ -128,6 +130,8 @@ export async function createMenuItem(formData: FormData): Promise<ActionResult> 
     video_url: parsed.data.video_url || null,
     is_available: parsed.data.is_available,
     display_order: parsed.data.display_order,
+    tag: parsed.data.tag || null,
+    is_featured: parsed.data.is_featured,
   });
 
   if (error) return actionError('تعذّر إضافة الصنف. حاول مرة أخرى.');
@@ -159,6 +163,8 @@ export async function updateMenuItem(formData: FormData): Promise<ActionResult> 
       video_url: parsed.data.video_url || null,
       is_available: parsed.data.is_available,
       display_order: parsed.data.display_order,
+      tag: parsed.data.tag || null,
+      is_featured: parsed.data.is_featured,
     })
     .eq('id', id.data)
     .eq('restaurant_id', session.restaurant.id);

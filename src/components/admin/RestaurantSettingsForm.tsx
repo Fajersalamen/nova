@@ -14,6 +14,7 @@ export function RestaurantSettingsForm({ restaurant }: Props) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [logoUrl, setLogoUrl] = useState(restaurant.logo_url ?? '');
+  const [aboutImageUrl, setAboutImageUrl] = useState(restaurant.about_image_url ?? '');
   const [error, setError] = useState<string | null>(null);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [saved, setSaved] = useState(false);
@@ -54,6 +55,7 @@ export function RestaurantSettingsForm({ restaurant }: Props) {
 
       <form action={handleSubmit} className="mt-6 space-y-5">
         <input type="hidden" name="logo_url" value={logoUrl} />
+        <input type="hidden" name="about_image_url" value={aboutImageUrl} />
 
         <div className="grid gap-5 sm:grid-cols-2">
           <div className="space-y-1">
@@ -130,6 +132,113 @@ export function RestaurantSettingsForm({ restaurant }: Props) {
         </div>
 
         <MediaUploader kind="image" value={logoUrl} onChange={setLogoUrl} label="شعار المطعم" />
+
+        <hr className="border-neutral-200" />
+        <h3 className="text-sm font-bold text-neutral-900">محتوى الصفحة الرئيسية</h3>
+
+        <div className="space-y-1">
+          <label className="block text-sm font-medium text-neutral-700">
+            شعار المطعم النصي (Tagline)
+          </label>
+          <input
+            name="tagline"
+            maxLength={120}
+            defaultValue={restaurant.tagline ?? ''}
+            placeholder="مثال: فحم حقيقي. لحم طازج."
+            className="w-full rounded-md border border-neutral-300 px-3 py-2 outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500"
+          />
+          <p className="text-xs text-neutral-500">يظهر كعنوان كبير أعلى الصفحة الرئيسية بدل اسم المطعم. اتركه فارغًا لاستخدام اسم المطعم.</p>
+        </div>
+
+        <div className="space-y-1">
+          <label className="block text-sm font-medium text-neutral-700">وصف مختصر</label>
+          <textarea
+            name="hero_description"
+            rows={2}
+            maxLength={300}
+            defaultValue={restaurant.hero_description ?? ''}
+            className="w-full rounded-md border border-neutral-300 px-3 py-2 outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500"
+          />
+        </div>
+
+        <div className="space-y-1">
+          <label className="block text-sm font-medium text-neutral-700">ساعات العمل</label>
+          <input
+            name="hours_label"
+            maxLength={80}
+            defaultValue={restaurant.hours_label ?? ''}
+            placeholder="مثال: مفتوح 24 ساعة"
+            className="w-full rounded-md border border-neutral-300 px-3 py-2 outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500"
+          />
+          <p className="text-xs text-neutral-500">
+            اتركه فارغًا لإخفاء شارة الساعات من الموقع.
+          </p>
+        </div>
+
+        <div className="space-y-2">
+          <span className="block text-sm font-medium text-neutral-700">الخدمات المتوفرة</span>
+          <label className="flex items-center gap-2 text-sm text-neutral-700">
+            <input
+              type="checkbox"
+              name="has_dine_in"
+              defaultChecked={restaurant.has_dine_in}
+              className="h-4 w-4 rounded border-neutral-300"
+            />
+            تناول في المطعم
+          </label>
+          <label className="flex items-center gap-2 text-sm text-neutral-700">
+            <input
+              type="checkbox"
+              name="has_delivery"
+              defaultChecked={restaurant.has_delivery}
+              className="h-4 w-4 rounded border-neutral-300"
+            />
+            توصيل
+          </label>
+          <label className="flex items-center gap-2 text-sm text-neutral-700">
+            <input
+              type="checkbox"
+              name="has_drive_thru"
+              defaultChecked={restaurant.has_drive_thru}
+              className="h-4 w-4 rounded border-neutral-300"
+            />
+            درايف ثرو
+          </label>
+        </div>
+
+        <hr className="border-neutral-200" />
+        <h3 className="text-sm font-bold text-neutral-900">صفحة &quot;من نحن&quot;</h3>
+
+        <div className="space-y-1">
+          <label className="block text-sm font-medium text-neutral-700">عنوان القصة</label>
+          <input
+            name="about_title"
+            maxLength={120}
+            defaultValue={restaurant.about_title ?? ''}
+            className="w-full rounded-md border border-neutral-300 px-3 py-2 outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500"
+          />
+        </div>
+
+        <div className="space-y-1">
+          <label className="block text-sm font-medium text-neutral-700">نص القصة</label>
+          <textarea
+            name="about_body"
+            rows={5}
+            maxLength={4000}
+            defaultValue={restaurant.about_body ?? ''}
+            className="w-full rounded-md border border-neutral-300 px-3 py-2 outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500"
+          />
+          <p className="text-xs text-neutral-500">
+            كل فقرة بسطر جديد. اتركه فارغًا لإخفاء صفحة &quot;من نحن&quot;.
+          </p>
+        </div>
+
+        <MediaUploader
+          kind="image"
+          value={aboutImageUrl}
+          onChange={setAboutImageUrl}
+          label="صورة صفحة من نحن"
+        />
 
         <button
           type="submit"

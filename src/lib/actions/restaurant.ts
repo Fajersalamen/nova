@@ -17,6 +17,15 @@ export async function updateRestaurantSettings(formData: FormData): Promise<Acti
     google_maps_embed_url: formData.get('google_maps_embed_url') ?? '',
     google_place_id: formData.get('google_place_id') ?? '',
     logo_url: formData.get('logo_url') ?? '',
+    tagline: formData.get('tagline') ?? '',
+    hero_description: formData.get('hero_description') ?? '',
+    hours_label: formData.get('hours_label') ?? '',
+    has_dine_in: formData.get('has_dine_in') === 'on',
+    has_delivery: formData.get('has_delivery') === 'on',
+    has_drive_thru: formData.get('has_drive_thru') === 'on',
+    about_title: formData.get('about_title') ?? '',
+    about_body: formData.get('about_body') ?? '',
+    about_image_url: formData.get('about_image_url') ?? '',
   });
 
   if (!parsed.success) {
@@ -38,12 +47,21 @@ export async function updateRestaurantSettings(formData: FormData): Promise<Acti
       google_maps_embed_url: parsed.data.google_maps_embed_url || null,
       google_place_id: parsed.data.google_place_id || null,
       logo_url: parsed.data.logo_url || null,
+      tagline: parsed.data.tagline || null,
+      hero_description: parsed.data.hero_description || null,
+      hours_label: parsed.data.hours_label || null,
+      has_dine_in: parsed.data.has_dine_in,
+      has_delivery: parsed.data.has_delivery,
+      has_drive_thru: parsed.data.has_drive_thru,
+      about_title: parsed.data.about_title || null,
+      about_body: parsed.data.about_body || null,
+      about_image_url: parsed.data.about_image_url || null,
     })
     .eq('id', session.restaurant.id);
 
   if (error) return actionError('تعذّر حفظ الإعدادات.');
 
-  revalidatePath(`/${session.restaurant.slug}`);
+  revalidatePath(`/${session.restaurant.slug}`, 'layout');
   revalidatePath('/admin/settings');
   return ACTION_OK;
 }
@@ -64,7 +82,7 @@ export async function moderateReview(formData: FormData): Promise<ActionResult> 
 
   if (error) return actionError('تعذّر تحديث حالة التقييم.');
 
-  revalidatePath(`/${session.restaurant.slug}`);
+  revalidatePath(`/${session.restaurant.slug}`, 'layout');
   revalidatePath('/admin/reviews');
   return ACTION_OK;
 }
@@ -84,7 +102,7 @@ export async function deleteReview(formData: FormData): Promise<ActionResult> {
 
   if (error) return actionError('تعذّر حذف التقييم.');
 
-  revalidatePath(`/${session.restaurant.slug}`);
+  revalidatePath(`/${session.restaurant.slug}`, 'layout');
   revalidatePath('/admin/reviews');
   return ACTION_OK;
 }
