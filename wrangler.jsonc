@@ -23,14 +23,17 @@
       "binding": "NEXT_INC_CACHE_R2_BUCKET",
       "bucket_name": "nova-next-cache"
     }
-  ]
+  ],
 
-  // A KV namespace for on-demand revalidation (NEXT_TAG_CACHE_KV) is
-  // planned but not wired up yet — open-next.config.ts already points at
-  // it and gracefully no-ops until the binding exists here, so admin
-  // saves keep working off the 120s time-based ISR window in the
-  // meantime. Deliberately left out of this file until a real namespace
-  // id is available: a placeholder id here would fail every build.
+  // Tracks which pages were revalidated (settings/menu/branches saves in
+  // the admin), so those changes appear right away instead of waiting on
+  // the 120s time-based ISR window.
+  "kv_namespaces": [
+    {
+      "binding": "NEXT_TAG_CACHE_KV",
+      "id": "42461705bd974760b1836f82b2003eb"
+    }
+  ]
 
   // Secrets (Supabase keys, R2 credentials, REVALIDATE_SECRET) are NOT
   // stored here. Set them per environment in the Cloudflare dashboard, or
