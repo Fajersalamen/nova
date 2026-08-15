@@ -1,8 +1,5 @@
-'use client';
-
 import { Clock, MapPin, Navigation, Phone } from 'lucide-react';
 import { MapIllustration } from './MapIllustration';
-import { useT } from './LocaleProvider';
 
 interface Props {
   restaurantName: string;
@@ -12,7 +9,6 @@ interface Props {
 }
 
 export function MapEmbed({ restaurantName, address, phone, hoursLabel }: Props) {
-  const t = useT();
   const directionsUrl = address
     ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`
     : null;
@@ -23,7 +19,7 @@ export function MapEmbed({ restaurantName, address, phone, hoursLabel }: Props) 
         <div>
           <p className="flex items-center gap-2 text-sm font-black text-accent-400">
             <MapPin className="h-4 w-4" aria-hidden />
-            {t('ourLocation')}
+            موقعنا
           </p>
           <h2 id="map-heading" className="mt-2 text-4xl font-black tracking-tight sm:text-5xl">
             {restaurantName}
@@ -60,7 +56,7 @@ export function MapEmbed({ restaurantName, address, phone, hoursLabel }: Props) 
               className="mt-8 inline-flex items-center gap-2 rounded-full bg-accent-400 px-8 py-3.5 text-base font-black text-accent-900 shadow-lg transition-transform hover:scale-105"
             >
               <Navigation className="h-5 w-5" aria-hidden />
-              {t('getDirections')}
+              احصل على الاتجاهات
             </a>
           )}
         </div>

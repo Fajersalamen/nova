@@ -5,8 +5,6 @@ import { getRestaurantSiteData } from '@/lib/restaurant-site-data';
 import { BranchesSection } from '@/components/public/BranchesSection';
 import { ReviewForm } from '@/components/public/ReviewForm';
 import { CtaBand } from '@/components/public/CtaBand';
-import { T } from '@/components/public/T';
-import type { StringKey } from '@/lib/i18n';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -31,17 +29,15 @@ export default async function ContactPage({ params }: PageProps) {
     : null;
 
   const services = [
-    restaurant.has_dine_in && ('dineIn' as StringKey),
-    restaurant.has_drive_thru && ('driveThru' as StringKey),
-    restaurant.has_delivery && ('delivery' as StringKey),
-  ].filter((s): s is StringKey => Boolean(s));
+    restaurant.has_dine_in && 'تناول في المطعم',
+    restaurant.has_drive_thru && 'درايف ثرو',
+    restaurant.has_delivery && 'توصيل بدون تلامس',
+  ].filter((s): s is string => Boolean(s));
 
   return (
     <main>
       <section className="bg-brand-600 py-16 text-center text-white">
-        <h1 className="text-5xl font-black tracking-tight sm:text-6xl">
-          <T k="contactPageTitle" />
-        </h1>
+        <h1 className="text-5xl font-black tracking-tight sm:text-6xl">اتصل بنا</h1>
         {restaurant.hours_label && <p className="mt-4 text-sm font-bold opacity-90">{restaurant.hours_label}</p>}
       </section>
 
@@ -54,12 +50,8 @@ export default async function ContactPage({ params }: PageProps) {
             <div className="flex h-14 w-14 items-center justify-center rounded-full bg-brand-600 text-white transition-transform group-hover:scale-110">
               <Phone className="h-7 w-7" aria-hidden />
             </div>
-            <h2 className="mt-5 text-2xl font-black text-ink">
-              <T k="contactCallUs" />
-            </h2>
-            <p className="mt-2 text-sm font-semibold text-neutral-600">
-              <T k="contactCallUsDesc" />
-            </p>
+            <h2 className="mt-5 text-2xl font-black text-ink">اطلب على الهاتف</h2>
+            <p className="mt-2 text-sm font-semibold text-neutral-600">للطلبات والاستفسارات.</p>
             <p className="mt-4 text-2xl font-black text-brand-600" dir="ltr">
               {restaurant.phone_whatsapp}
             </p>
@@ -75,13 +67,11 @@ export default async function ContactPage({ params }: PageProps) {
               <div className="flex h-14 w-14 items-center justify-center rounded-full bg-secondary-600 text-white transition-transform group-hover:scale-110">
                 <MapPin className="h-7 w-7" aria-hidden />
               </div>
-              <h2 className="mt-5 text-2xl font-black text-ink">
-                <T k="contactVisitUs" />
-              </h2>
+              <h2 className="mt-5 text-2xl font-black text-ink">تفضل بزيارتنا</h2>
               <p className="mt-2 text-sm font-semibold text-neutral-600">{restaurant.address}</p>
               <p className="mt-4 inline-flex items-center gap-2 rounded-full bg-accent-400 px-5 py-2.5 text-sm font-black text-accent-900">
                 <Navigation className="h-4 w-4" aria-hidden />
-                <T k="getDirections" />
+                احصل على الاتجاهات
               </p>
             </a>
           )}
@@ -91,9 +81,7 @@ export default async function ContactPage({ params }: PageProps) {
               <div className="flex h-14 w-14 items-center justify-center rounded-full bg-accent-400 text-accent-900">
                 <Clock className="h-7 w-7" aria-hidden />
               </div>
-              <h2 className="mt-5 text-2xl font-black text-ink">
-                <T k="contactHours" />
-              </h2>
+              <h2 className="mt-5 text-2xl font-black text-ink">ساعات العمل</h2>
               <p className="mt-4 flex items-center gap-2 text-xl font-black text-ink">
                 <span className="h-2.5 w-2.5 animate-pulse rounded-full bg-open" aria-hidden />
                 {restaurant.hours_label}
@@ -106,14 +94,12 @@ export default async function ContactPage({ params }: PageProps) {
               <div className="flex h-14 w-14 items-center justify-center rounded-full bg-ink text-cream">
                 <UtensilsCrossed className="h-7 w-7" aria-hidden />
               </div>
-              <h2 className="mt-5 text-2xl font-black text-ink">
-                <T k="contactServices" />
-              </h2>
+              <h2 className="mt-5 text-2xl font-black text-ink">خدماتنا</h2>
               <ul className="mt-4 space-y-2.5 text-sm font-black text-ink">
                 {services.map((s) => (
                   <li key={s} className="flex items-center gap-2.5">
                     <span className="h-1.5 w-1.5 rounded-full bg-brand-600" aria-hidden />
-                    <T k={s} />
+                    {s}
                   </li>
                 ))}
               </ul>
@@ -132,7 +118,10 @@ export default async function ContactPage({ params }: PageProps) {
 
       <BranchesSection branches={branches} />
 
-      <CtaBand phone={restaurant.phone_whatsapp} heading={<T k="contactCta" />} />
+      <CtaBand
+        phone={restaurant.phone_whatsapp}
+        heading={restaurant.contact_cta_heading ?? 'جعان هلأ؟ خذ خطك واتصل.'}
+      />
     </main>
   );
 }

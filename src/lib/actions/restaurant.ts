@@ -26,6 +26,10 @@ export async function updateRestaurantSettings(formData: FormData): Promise<Acti
     about_title: formData.get('about_title') ?? '',
     about_body: formData.get('about_body') ?? '',
     about_image_url: formData.get('about_image_url') ?? '',
+    home_cta_heading: formData.get('home_cta_heading') ?? '',
+    menu_cta_heading: formData.get('menu_cta_heading') ?? '',
+    contact_cta_heading: formData.get('contact_cta_heading') ?? '',
+    about_hero_title: formData.get('about_hero_title') ?? '',
   });
 
   if (!parsed.success) {
@@ -56,6 +60,10 @@ export async function updateRestaurantSettings(formData: FormData): Promise<Acti
       about_title: parsed.data.about_title || null,
       about_body: parsed.data.about_body || null,
       about_image_url: parsed.data.about_image_url || null,
+      home_cta_heading: parsed.data.home_cta_heading || null,
+      menu_cta_heading: parsed.data.menu_cta_heading || null,
+      contact_cta_heading: parsed.data.contact_cta_heading || null,
+      about_hero_title: parsed.data.about_hero_title || null,
     })
     .eq('id', session.restaurant.id);
 

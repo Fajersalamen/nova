@@ -175,6 +175,19 @@ export function RestaurantSettingsForm({ restaurant }: Props) {
           </p>
         </div>
 
+        <div className="space-y-1">
+          <label className="block text-sm font-medium text-neutral-700">
+            عنوان دعوة الطلب (أسفل الصفحة الرئيسية)
+          </label>
+          <input
+            name="home_cta_heading"
+            maxLength={120}
+            defaultValue={restaurant.home_cta_heading ?? ''}
+            placeholder="جعان؟ اتصل فينا."
+            className="w-full rounded-md border border-neutral-300 px-3 py-2 outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500"
+          />
+        </div>
+
         <div className="space-y-2">
           <span className="block text-sm font-medium text-neutral-700">الخدمات المتوفرة</span>
           <label className="flex items-center gap-2 text-sm text-neutral-700">
@@ -210,6 +223,19 @@ export function RestaurantSettingsForm({ restaurant }: Props) {
         <h3 className="text-sm font-bold text-neutral-900">صفحة &quot;من نحن&quot;</h3>
 
         <div className="space-y-1">
+          <label className="block text-sm font-medium text-neutral-700">
+            عنوان أعلى الصفحة
+          </label>
+          <input
+            name="about_hero_title"
+            maxLength={80}
+            defaultValue={restaurant.about_hero_title ?? ''}
+            placeholder="قصتنا"
+            className="w-full rounded-md border border-neutral-300 px-3 py-2 outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500"
+          />
+        </div>
+
+        <div className="space-y-1">
           <label className="block text-sm font-medium text-neutral-700">عنوان القصة</label>
           <input
             name="about_title"
@@ -239,6 +265,35 @@ export function RestaurantSettingsForm({ restaurant }: Props) {
           onChange={setAboutImageUrl}
           label="صورة صفحة من نحن"
         />
+
+        <hr className="border-neutral-200" />
+        <h3 className="text-sm font-bold text-neutral-900">نصوص أخرى</h3>
+
+        <div className="space-y-1">
+          <label className="block text-sm font-medium text-neutral-700">
+            عنوان دعوة الطلب — صفحة القائمة
+          </label>
+          <input
+            name="menu_cta_heading"
+            maxLength={120}
+            defaultValue={restaurant.menu_cta_heading ?? ''}
+            placeholder="جاهز تطلب؟ اتصل فينا."
+            className="w-full rounded-md border border-neutral-300 px-3 py-2 outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500"
+          />
+        </div>
+
+        <div className="space-y-1">
+          <label className="block text-sm font-medium text-neutral-700">
+            عنوان دعوة الطلب — صفحة اتصل بنا
+          </label>
+          <input
+            name="contact_cta_heading"
+            maxLength={120}
+            defaultValue={restaurant.contact_cta_heading ?? ''}
+            placeholder="جعان هلأ؟ خذ خطك واتصل."
+            className="w-full rounded-md border border-neutral-300 px-3 py-2 outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500"
+          />
+        </div>
 
         <button
           type="submit"

@@ -3,7 +3,6 @@ import type { Metadata } from 'next';
 import { getRestaurantSiteData } from '@/lib/restaurant-site-data';
 import { MenuList } from '@/components/public/MenuList';
 import { CtaBand } from '@/components/public/CtaBand';
-import { T } from '@/components/public/T';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -26,9 +25,7 @@ export default async function MenuPage({ params }: PageProps) {
   return (
     <main>
       <section className="bg-brand-600 py-16 text-center text-white">
-        <h1 className="text-5xl font-black tracking-tight sm:text-6xl">
-          <T k="menuPageTitle" />
-        </h1>
+        <h1 className="text-5xl font-black tracking-tight sm:text-6xl">القائمة</h1>
         {restaurant.hours_label && (
           <p className="mt-4 text-sm font-bold opacity-90">{restaurant.hours_label}</p>
         )}
@@ -38,7 +35,10 @@ export default async function MenuPage({ params }: PageProps) {
         <MenuList categories={categories} items={items} />
       </div>
 
-      <CtaBand phone={restaurant.phone_whatsapp} heading={<T k="menuCta" />} />
+      <CtaBand
+        phone={restaurant.phone_whatsapp}
+        heading={restaurant.menu_cta_heading ?? 'جاهز تطلب؟ اتصل فينا.'}
+      />
     </main>
   );
 }

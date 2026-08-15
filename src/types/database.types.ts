@@ -32,6 +32,10 @@ export type Database = {
           about_title: string | null;
           about_body: string | null;
           about_image_url: string | null;
+          home_cta_heading: string | null;
+          menu_cta_heading: string | null;
+          contact_cta_heading: string | null;
+          about_hero_title: string | null;
           created_at: string;
           updated_at: string;
         };
@@ -55,6 +59,10 @@ export type Database = {
           about_title?: string | null;
           about_body?: string | null;
           about_image_url?: string | null;
+          home_cta_heading?: string | null;
+          menu_cta_heading?: string | null;
+          contact_cta_heading?: string | null;
+          about_hero_title?: string | null;
           created_at?: string;
           updated_at?: string;
         };
@@ -78,6 +86,10 @@ export type Database = {
           about_title?: string | null;
           about_body?: string | null;
           about_image_url?: string | null;
+          home_cta_heading?: string | null;
+          menu_cta_heading?: string | null;
+          contact_cta_heading?: string | null;
+          about_hero_title?: string | null;
           created_at?: string;
           updated_at?: string;
         };

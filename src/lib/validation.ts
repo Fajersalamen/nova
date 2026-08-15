@@ -42,6 +42,10 @@ export const restaurantSettingsSchema = z.object({
   about_title: z.string().trim().max(120).optional().or(z.literal('')),
   about_body: z.string().trim().max(4000).optional().or(z.literal('')),
   about_image_url: z.string().url().optional().or(z.literal('')),
+  home_cta_heading: z.string().trim().max(120).optional().or(z.literal('')),
+  menu_cta_heading: z.string().trim().max(120).optional().or(z.literal('')),
+  contact_cta_heading: z.string().trim().max(120).optional().or(z.literal('')),
+  about_hero_title: z.string().trim().max(80).optional().or(z.literal('')),
 });
 
 export const branchSchema = z.object({

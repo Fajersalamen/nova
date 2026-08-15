@@ -1,7 +1,4 @@
-'use client';
-
 import { MapPin, Phone } from 'lucide-react';
-import { useT } from './LocaleProvider';
 import type { RestaurantBranch } from '@/types/database.types';
 
 interface Props {
@@ -9,13 +6,12 @@ interface Props {
 }
 
 export function BranchesSection({ branches }: Props) {
-  const t = useT();
   if (branches.length === 0) return null;
 
   return (
     <section aria-labelledby="branches-heading" className="mx-auto max-w-6xl px-4 pb-20">
       <h2 id="branches-heading" className="mb-8 text-3xl font-black tracking-tight text-ink">
-        {t('ourBranches')}
+        فروعنا
       </h2>
 
       <div className="grid gap-8 sm:grid-cols-2">
@@ -43,7 +39,7 @@ export function BranchesSection({ branches }: Props) {
               <div className="overflow-hidden rounded-2xl border border-border">
                 <iframe
                   src={branch.google_maps_embed_url}
-                  title={`${t('mapWord')} ${branch.name}`}
+                  title={`خريطة ${branch.name}`}
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
                   className="h-[220px] w-full border-0"

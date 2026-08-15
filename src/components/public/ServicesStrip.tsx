@@ -1,7 +1,4 @@
-'use client';
-
 import { Car, Clock, Package, UtensilsCrossed } from 'lucide-react';
-import { useT } from './LocaleProvider';
 
 interface Props {
   hasDineIn: boolean;
@@ -15,12 +12,11 @@ interface Props {
  * like "delivery" or "24 hours" invented for a tenant that hasn't said so.
  */
 export function ServicesStrip({ hasDineIn, hasDelivery, hasDriveThru, hoursLabel }: Props) {
-  const t = useT();
   const items = [
     hoursLabel && { icon: Clock, label: hoursLabel },
-    hasDineIn && { icon: UtensilsCrossed, label: t('dineIn') },
-    hasDriveThru && { icon: Car, label: t('driveThru') },
-    hasDelivery && { icon: Package, label: t('delivery') },
+    hasDineIn && { icon: UtensilsCrossed, label: 'تناول في المطعم' },
+    hasDriveThru && { icon: Car, label: 'درايف ثرو' },
+    hasDelivery && { icon: Package, label: 'توصيل بدون تلامس' },
   ].filter((item): item is { icon: typeof Clock; label: string } => Boolean(item));
 
   if (items.length === 0) return null;

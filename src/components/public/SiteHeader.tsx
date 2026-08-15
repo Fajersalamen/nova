@@ -4,9 +4,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Clock } from 'lucide-react';
-import { useT } from './LocaleProvider';
-import { LanguageToggle } from './LanguageToggle';
-import type { StringKey } from '@/lib/i18n';
 
 interface Props {
   slug: string;
@@ -18,12 +15,11 @@ interface Props {
 
 export function SiteHeader({ slug, restaurantName, logoUrl, phone, hoursLabel }: Props) {
   const pathname = usePathname();
-  const t = useT();
-  const navItems: { href: string; key: StringKey }[] = [
-    { href: `/${slug}`, key: 'navHome' },
-    { href: `/${slug}/menu`, key: 'navMenu' },
-    { href: `/${slug}/about`, key: 'navAbout' },
-    { href: `/${slug}/contact`, key: 'navContact' },
+  const navItems = [
+    { href: `/${slug}`, label: 'الرئيسية' },
+    { href: `/${slug}/menu`, label: 'القائمة' },
+    { href: `/${slug}/about`, label: 'من نحن' },
+    { href: `/${slug}/contact`, label: 'اتصل بنا' },
   ];
 
   return (
@@ -33,7 +29,7 @@ export function SiteHeader({ slug, restaurantName, logoUrl, phone, hoursLabel }:
           {logoUrl ? (
             <Image
               src={logoUrl}
-              alt={`${t('logoAlt')} ${restaurantName}`}
+              alt={`شعار ${restaurantName}`}
               width={48}
               height={48}
               className="h-12 w-auto drop-shadow-md"
@@ -58,7 +54,7 @@ export function SiteHeader({ slug, restaurantName, logoUrl, phone, hoursLabel }:
                 pathname === item.href ? 'text-accent-400' : ''
               }`}
             >
-              {t(item.key)}
+              {item.label}
             </Link>
           ))}
         </nav>
@@ -70,12 +66,11 @@ export function SiteHeader({ slug, restaurantName, logoUrl, phone, hoursLabel }:
               {hoursLabel}
             </span>
           )}
-          <LanguageToggle className="rounded-full border border-white/40 px-2.5 py-1 text-xs font-bold transition-colors hover:border-accent-400 hover:text-accent-400" />
           <a
             href={`tel:${phone.replace(/[^\d+]/g, '')}`}
             className="rounded-full bg-accent-400 px-4 py-2 text-sm font-black text-accent-900 shadow transition-transform hover:scale-105"
           >
-            {t('orderNow')}
+            اطلب الآن
           </a>
         </div>
       </div>
@@ -92,7 +87,7 @@ export function SiteHeader({ slug, restaurantName, logoUrl, phone, hoursLabel }:
               pathname === item.href ? 'text-accent-400' : ''
             }`}
           >
-            {t(item.key)}
+            {item.label}
           </Link>
         ))}
       </nav>
