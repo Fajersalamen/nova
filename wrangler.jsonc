@@ -15,6 +15,18 @@
       "binding": "NEXT_INC_CACHE_R2_BUCKET",
       "bucket_name": "nova-next-cache"
     }
+  ],
+
+  // Tracks which pages were revalidated (settings/menu/branches saves in
+  // the admin), so those changes appear right away instead of waiting on
+  // the 120s time-based ISR window. Create the namespace first:
+  //   npx wrangler kv namespace create NEXT_TAG_CACHE_KV
+  // then replace the id below with the one that command prints out.
+  "kv_namespaces": [
+    {
+      "binding": "NEXT_TAG_CACHE_KV",
+      "id": "REPLACE_WITH_KV_NAMESPACE_ID"
+    }
   ]
 
   // Secrets (Supabase keys, R2 credentials, REVALIDATE_SECRET) are NOT
