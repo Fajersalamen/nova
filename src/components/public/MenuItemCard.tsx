@@ -1,5 +1,8 @@
+'use client';
+
 import Image from 'next/image';
 import { LazyVideo } from './LazyVideo';
+import { useLocale } from './LocaleProvider';
 import { formatPrice } from '@/lib/utils';
 import type { MenuItem } from '@/types/database.types';
 
@@ -8,6 +11,7 @@ interface Props {
 }
 
 export function MenuItemCard({ item }: Props) {
+  const { locale } = useLocale();
   return (
     <article className="group overflow-hidden rounded-3xl border border-border bg-white shadow-sm transition-shadow hover:shadow-xl">
       <div className="relative overflow-hidden">
@@ -36,7 +40,7 @@ export function MenuItemCard({ item }: Props) {
         <div className="flex items-center justify-between gap-3">
           <h3 className="text-xl font-black text-ink">{item.name}</h3>
           <span className="shrink-0 rounded-full bg-accent-400 px-3 py-1 text-sm font-black text-accent-900">
-            {formatPrice(item.price)}
+            {formatPrice(item.price, locale)}
           </span>
         </div>
         {item.description && (
@@ -50,6 +54,7 @@ export function MenuItemCard({ item }: Props) {
 }
 
 export function MenuItemRow({ item }: { item: MenuItem }) {
+  const { locale } = useLocale();
   return (
     <li className="flex items-center justify-between gap-4 px-6 py-4">
       <div>
@@ -59,7 +64,7 @@ export function MenuItemRow({ item }: { item: MenuItem }) {
         )}
       </div>
       <span className="shrink-0 rounded-full bg-accent-400 px-3 py-1 text-sm font-black text-accent-900">
-        {formatPrice(item.price)}
+        {formatPrice(item.price, locale)}
       </span>
     </li>
   );

@@ -54,6 +54,8 @@ const strings = {
     dineIn: 'تناول في المطعم',
     driveThru: 'درايف ثرو',
     delivery: 'توصيل بدون تلامس',
+    mapWord: 'خريطة',
+    genericErrorMessage: 'حدث خطأ غير متوقع.',
   },
   en: {
     navHome: 'Home',
@@ -103,6 +105,8 @@ const strings = {
     dineIn: 'Dine-in',
     driveThru: 'Drive-thru',
     delivery: 'Contactless Delivery',
+    mapWord: 'Map',
+    genericErrorMessage: 'An unexpected error occurred.',
   },
 } as const;
 

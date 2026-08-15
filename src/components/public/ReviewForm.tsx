@@ -19,7 +19,7 @@ export function ReviewForm({ restaurantId }: Props) {
     startTransition(async () => {
       const result = await submitReview(formData);
       if (!result.ok) {
-        setError(result.error ?? 'حدث خطأ غير متوقع.');
+        setError(result.error ?? t('genericErrorMessage'));
         return;
       }
       setSubmitted(true);
