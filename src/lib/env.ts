@@ -33,6 +33,14 @@ export function supabaseAnonKey(): string | undefined {
   return resolve(process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY, 'NEXT_PUBLIC_SUPABASE_ANON_KEY');
 }
 
+// Only NEXT_PUBLIC_R2_PUBLIC_URL needs the build/runtime dual lookup — the
+// other R2 vars are server-only and never get inlined at build time, so a
+// plain process.env read (done where they're used) already sees whichever
+// panel the operator set them in.
+export function r2PublicUrl(): string | undefined {
+  return resolve(process.env.NEXT_PUBLIC_R2_PUBLIC_URL, 'NEXT_PUBLIC_R2_PUBLIC_URL');
+}
+
 /**
  * Names of the variables that are still unset after both lookups. Callers
  * report these to the operator rather than letting the Supabase constructor

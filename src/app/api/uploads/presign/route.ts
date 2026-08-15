@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 import { createClient } from '@/lib/supabase/server';
-import { assertAllowedMedia, presignUpload } from '@/lib/r2';
+import { assertAllowedMedia, missingR2Env, presignUpload } from '@/lib/r2';
 
 const bodySchema = z.object({
   fileName: z.string().min(1).max(200),
@@ -48,6 +48,14 @@ export async function POST(request: Request) {
   // request body, so an admin can only ever write into their own prefix.
   const extension = parsed.data.fileName.split('.').pop()?.toLowerCase().replace(/[^a-z0-9]/g, '');
   const key = `${membership.restaurant_id}/${kind}s/${crypto.randomUUID()}${extension ? `.${extension}` : ''}`;
+
+  const missing = missingR2Env();
+  if (missing.length > 0) {
+    return NextResponse.json(
+      { error: `خدمة الرفع غير مهيأة. المتغيرات الناقصة: ${missing.join(', ')}` },
+      { status: 500 },
+    );
+  }
 
   try {
     const { uploadUrl, publicUrl } = await presignUpload({

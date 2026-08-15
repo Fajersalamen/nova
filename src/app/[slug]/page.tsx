@@ -162,6 +162,16 @@ export default async function RestaurantPage({ params }: PageProps) {
   // image, since we only show media the restaurant actually uploaded.
   const heroImage = items.find((item) => item.image_url)?.image_url ?? null;
 
+  // Real rating data only — Google's when linked, otherwise the average of
+  // the site's own approved reviews. Never a placeholder count.
+  const ratingValue =
+    google.averageRating ??
+    (internalReviews.length > 0
+      ? internalReviews.reduce((sum, r) => sum + r.rating, 0) / internalReviews.length
+      : null);
+  const ratingCount =
+    google.totalRatings ?? (internalReviews.length > 0 ? internalReviews.length : null);
+
   return (
     <>
       <SiteHeader
@@ -177,34 +187,61 @@ export default async function RestaurantPage({ params }: PageProps) {
       <div className="bg-cream">
         <section id="hero" className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-16">
           <div className={`grid items-center gap-10 ${heroImage ? 'lg:grid-cols-2' : ''}`}>
-            <div className="space-y-6 text-center lg:text-right">
+            <div className="space-y-6 text-center lg:order-2 lg:text-right">
               <span className="inline-block rounded-full bg-brand-600/10 px-4 py-1.5 text-sm font-semibold text-brand-700">
                 {restaurant.name}
+                {restaurant.address ? ` — ${restaurant.address}` : ''}
               </span>
               <h1 className="text-4xl font-bold tracking-tight text-ink sm:text-5xl">
                 {restaurant.name}
               </h1>
-              {restaurant.address && (
-                <p className="text-lg text-neutral-600">{restaurant.address}</p>
-              )}
               <div className="flex flex-wrap justify-center gap-3 lg:justify-start">
                 <CallButton
                   phone={restaurant.phone_whatsapp}
-                  className="inline-flex items-center gap-2 rounded-full bg-brand-600 px-6 py-3 font-semibold text-white shadow-sm transition hover:bg-brand-700"
-                />
+                  className="inline-flex items-center gap-2 rounded-full border border-brand-600 px-6 py-3 font-semibold text-brand-700 transition hover:bg-brand-600 hover:text-white"
+                >
+                  <span dir="ltr">{restaurant.phone_whatsapp}</span>
+                </CallButton>
+                {hasMenu && (
+                  <a
+                    href="#menu-heading"
+                    className="inline-flex items-center gap-2 rounded-full bg-brand-600 px-6 py-3 font-semibold text-white shadow-sm transition hover:bg-brand-700"
+                  >
+                    شاهد القائمة
+                  </a>
+                )}
               </div>
             </div>
 
             {heroImage && (
-              <div className="relative mx-auto aspect-[4/3] w-full max-w-md overflow-hidden rounded-2xl shadow-xl">
-                <Image
-                  src={heroImage}
-                  alt={restaurant.name}
-                  fill
-                  priority
-                  sizes="(max-width: 1024px) 100vw, 50vw"
-                  className="object-cover"
-                />
+              <div className="relative mx-auto w-full max-w-md lg:order-1">
+                <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl shadow-xl">
+                  <Image
+                    src={heroImage}
+                    alt={restaurant.name}
+                    fill
+                    priority
+                    sizes="(max-width: 1024px) 100vw, 50vw"
+                    className="object-cover"
+                  />
+                </div>
+
+                {restaurant.logo_url && (
+                  <Image
+                    src={restaurant.logo_url}
+                    alt={restaurant.name}
+                    width={72}
+                    height={72}
+                    className="absolute -top-4 right-4 h-16 w-16 rounded-full border-4 border-cream object-cover shadow-lg sm:h-[72px] sm:w-[72px]"
+                  />
+                )}
+
+                {ratingValue !== null && (
+                  <span className="absolute bottom-3 left-3 inline-flex items-center gap-1.5 rounded-full bg-accent-400 px-3 py-1.5 text-sm font-bold text-brand-900 shadow">
+                    ★ {ratingValue.toFixed(1)}
+                    {ratingCount !== null && ` (${ratingCount} تقييم)`}
+                  </span>
+                )}
               </div>
             )}
           </div>
@@ -235,19 +272,19 @@ export default async function RestaurantPage({ params }: PageProps) {
               {!restaurant.google_place_id && <ReviewForm restaurantId={restaurant.id} />}
             </div>
 
-            {restaurant.google_maps_embed_url && (
-              <div id="map-heading">
-                <MapEmbed
-                  embedUrl={restaurant.google_maps_embed_url}
-                  restaurantName={restaurant.name}
-                />
-              </div>
-            )}
-
             <BranchesSection branches={branches} />
           </div>
         </main>
       </div>
+
+      {restaurant.google_maps_embed_url && (
+        <MapEmbed
+          embedUrl={restaurant.google_maps_embed_url}
+          restaurantName={restaurant.name}
+          address={restaurant.address}
+          phone={restaurant.phone_whatsapp}
+        />
+      )}
 
       <SiteFooter
         restaurantName={restaurant.name}

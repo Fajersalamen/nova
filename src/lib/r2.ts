@@ -1,10 +1,23 @@
 import { AwsClient } from 'aws4fetch';
+import { r2PublicUrl } from '@/lib/env';
 
 /**
  * R2 is S3-compatible, and aws4fetch is a ~1.5kb signer built on the Fetch
  * API (no Node.js crypto/stream APIs) — that's what makes it work in the
  * Cloudflare Pages edge runtime, unlike the full @aws-sdk/client-s3.
  */
+// Names of the R2 variables still unset, so the presign route can tell the
+// operator exactly what to add instead of a generic "not configured".
+export function missingR2Env(): string[] {
+  const missing: string[] = [];
+  if (!process.env.R2_ACCOUNT_ID) missing.push('R2_ACCOUNT_ID');
+  if (!process.env.R2_ACCESS_KEY_ID) missing.push('R2_ACCESS_KEY_ID');
+  if (!process.env.R2_SECRET_ACCESS_KEY) missing.push('R2_SECRET_ACCESS_KEY');
+  if (!process.env.R2_BUCKET_NAME) missing.push('R2_BUCKET_NAME');
+  if (!r2PublicUrl()) missing.push('NEXT_PUBLIC_R2_PUBLIC_URL');
+  return missing;
+}
+
 function getR2Client() {
   const accountId = process.env.R2_ACCOUNT_ID;
   const accessKeyId = process.env.R2_ACCESS_KEY_ID;
@@ -36,7 +49,7 @@ export async function presignUpload({
   expiresInSeconds = 300,
 }: PresignUploadOptions): Promise<{ uploadUrl: string; publicUrl: string }> {
   const bucket = process.env.R2_BUCKET_NAME;
-  const publicBase = process.env.NEXT_PUBLIC_R2_PUBLIC_URL;
+  const publicBase = r2PublicUrl();
   if (!bucket || !publicBase) {
     throw new Error('R2 bucket/public URL are not configured (see .env.example).');
   }
