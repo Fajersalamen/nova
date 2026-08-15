@@ -23,6 +23,16 @@
       "binding": "NEXT_INC_CACHE_R2_BUCKET",
       "bucket_name": "nova-next-cache"
     }
+  ],
+
+  // Tracks which pages were revalidated (settings/menu/branches saves in
+  // the admin), so those changes appear right away instead of waiting on
+  // the 120s time-based ISR window.
+  "kv_namespaces": [
+    {
+      "binding": "NEXT_TAG_CACHE_KV",
+      "id": "42461705bd974760b1836f82b2003eb"
+    }
   ]
 
   // Secrets (Supabase keys, R2 credentials, REVALIDATE_SECRET) are NOT
