@@ -8,7 +8,7 @@ import { computeRating, getRestaurantSiteData } from '@/lib/restaurant-site-data
 import { ServicesStrip } from '@/components/public/ServicesStrip';
 import { MenuItemCard } from '@/components/public/MenuItemCard';
 import { ReviewsMarquee, type MarqueeReview } from '@/components/public/ReviewsMarquee';
-import { MapEmbed } from '@/components/public/MapEmbed';
+import { LocationsSection } from '@/components/public/LocationsSection';
 import { CtaBand } from '@/components/public/CtaBand';
 
 interface PageProps {
@@ -36,7 +36,7 @@ export default async function RestaurantHomePage({ params }: PageProps) {
   const data = await getRestaurantSiteData(slug);
   if (!data || 'configError' in data) notFound();
 
-  const { restaurant, items, internalReviews } = data;
+  const { restaurant, items, internalReviews, branches } = data;
 
   const google = restaurant.google_place_id
     ? await fetchGoogleReviews(restaurant.google_place_id)
@@ -176,14 +176,13 @@ export default async function RestaurantHomePage({ params }: PageProps) {
         isGoogleSourced={google.reviews.length > 0}
       />
 
-      {restaurant.address && (
-        <MapEmbed
-          restaurantName={restaurant.name}
-          address={restaurant.address}
-          phone={restaurant.phone_whatsapp}
-          hoursLabel={restaurant.hours_label}
-        />
-      )}
+      <LocationsSection
+        restaurantName={restaurant.name}
+        address={restaurant.address}
+        phone={restaurant.phone_whatsapp}
+        hoursLabel={restaurant.hours_label}
+        branches={branches}
+      />
 
       <CtaBand
         phone={restaurant.phone_whatsapp}

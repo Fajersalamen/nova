@@ -2,7 +2,6 @@ import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { Clock, MapPin, Navigation, Phone, UtensilsCrossed } from 'lucide-react';
 import { getRestaurantSiteData } from '@/lib/restaurant-site-data';
-import { BranchesSection } from '@/components/public/BranchesSection';
 import { ReviewForm } from '@/components/public/ReviewForm';
 import { CtaBand } from '@/components/public/CtaBand';
 
@@ -22,7 +21,7 @@ export default async function ContactPage({ params }: PageProps) {
   const data = await getRestaurantSiteData(slug);
   if (!data || 'configError' in data) notFound();
 
-  const { restaurant, branches } = data;
+  const { restaurant } = data;
 
   const directionsUrl = restaurant.address
     ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(restaurant.address)}`
@@ -115,8 +114,6 @@ export default async function ContactPage({ params }: PageProps) {
           </div>
         )}
       </section>
-
-      <BranchesSection branches={branches} />
 
       <CtaBand
         phone={restaurant.phone_whatsapp}
