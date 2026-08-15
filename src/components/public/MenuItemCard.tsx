@@ -1,16 +1,15 @@
 import Image from 'next/image';
 import { LazyVideo } from './LazyVideo';
-import { WhatsAppButton } from './WhatsAppButton';
+import { CallButton } from './CallButton';
 import { formatPrice } from '@/lib/utils';
 import type { MenuItem } from '@/types/database.types';
 
 interface Props {
   item: MenuItem;
-  restaurantName: string;
-  phoneWhatsapp: string;
+  phone: string;
 }
 
-export function MenuItemCard({ item, restaurantName, phoneWhatsapp }: Props) {
+export function MenuItemCard({ item, phone }: Props) {
   const hasMedia = Boolean(item.image_url || item.video_url);
 
   // Items with a photo get the full image-forward card; text-only items
@@ -60,14 +59,10 @@ export function MenuItemCard({ item, restaurantName, phoneWhatsapp }: Props) {
         )}
 
         <div className="mt-auto pt-3">
-          <WhatsAppButton
-            phoneWhatsapp={phoneWhatsapp}
-            restaurantName={restaurantName}
-            itemName={item.name}
-            className="inline-flex w-full items-center justify-center gap-2 rounded-md bg-[#25D366] px-4 py-2 text-sm font-medium text-white transition hover:bg-[#1da851]"
-          >
-            اطلب هذا الصنف
-          </WhatsAppButton>
+          <CallButton
+            phone={phone}
+            className="inline-flex w-full items-center justify-center gap-2 rounded-md bg-brand-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-brand-700"
+          />
         </div>
       </div>
     </article>

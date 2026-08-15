@@ -3,19 +3,19 @@ import { CallButton } from './CallButton';
 interface Props {
   restaurantName: string;
   address: string | null;
-  phoneWhatsapp: string;
+  phone: string;
   hasMenu: boolean;
   hasMap: boolean;
 }
 
-export function SiteFooter({ restaurantName, address, phoneWhatsapp, hasMenu, hasMap }: Props) {
+export function SiteFooter({ restaurantName, address, phone, hasMenu, hasMap }: Props) {
   return (
     <footer className="bg-ink text-white">
       <div className="mx-auto max-w-6xl px-4 py-12 text-center sm:px-6">
         <h2 className="text-2xl font-bold text-accent-400 sm:text-3xl">جاهز تطلب؟ اتصل فينا.</h2>
         <div className="mt-5 flex justify-center">
           <CallButton
-            phone={phoneWhatsapp}
+            phone={phone}
             className="inline-flex items-center gap-2 rounded-full bg-brand-600 px-8 py-3 font-semibold text-white transition hover:bg-brand-700"
           />
         </div>
@@ -27,7 +27,7 @@ export function SiteFooter({ restaurantName, address, phoneWhatsapp, hasMenu, ha
             <h3 className="mb-3 font-bold text-accent-400">تواصل معنا</h3>
             <ul className="space-y-2 text-sm text-white/80">
               <li dir="ltr" className="text-center sm:text-right">
-                {phoneWhatsapp}
+                {phone}
               </li>
               {address && <li>{address}</li>}
             </ul>

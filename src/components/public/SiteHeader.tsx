@@ -1,11 +1,11 @@
 import Image from 'next/image';
-import { WhatsAppButton } from './WhatsAppButton';
+import { CallButton } from './CallButton';
 
 interface Props {
   restaurantName: string;
   logoUrl: string | null;
   address: string | null;
-  phoneWhatsapp: string;
+  phone: string;
   hasMenu: boolean;
   hasReviews: boolean;
   hasMap: boolean;
@@ -22,7 +22,7 @@ export function SiteHeader({
   restaurantName,
   logoUrl,
   address,
-  phoneWhatsapp,
+  phone,
   hasMenu,
   hasReviews,
   hasMap,
@@ -72,13 +72,10 @@ export function SiteHeader({
           ))}
         </nav>
 
-        <WhatsAppButton
-          phoneWhatsapp={phoneWhatsapp}
-          restaurantName={restaurantName}
+        <CallButton
+          phone={phone}
           className="inline-flex items-center gap-1.5 rounded-full bg-accent-400 px-4 py-2 text-sm font-bold text-brand-900 transition hover:bg-accent-500"
-        >
-          اطلب الآن
-        </WhatsAppButton>
+        />
       </div>
     </header>
   );

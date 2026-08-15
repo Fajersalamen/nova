@@ -1,13 +1,11 @@
-import { WhatsAppButton } from './WhatsAppButton';
 import { CallButton } from './CallButton';
 import type { RestaurantBranch } from '@/types/database.types';
 
 interface Props {
   branches: RestaurantBranch[];
-  restaurantName: string;
 }
 
-export function BranchesSection({ branches, restaurantName }: Props) {
+export function BranchesSection({ branches }: Props) {
   if (branches.length === 0) return null;
 
   return (
@@ -25,17 +23,10 @@ export function BranchesSection({ branches, restaurantName }: Props) {
             <h3 className="font-semibold text-neutral-900">{branch.name}</h3>
             {branch.address && <p className="text-sm text-neutral-600">{branch.address}</p>}
 
-            <div className="flex flex-wrap gap-2">
-              <WhatsAppButton
-                phoneWhatsapp={branch.phone_whatsapp}
-                restaurantName={restaurantName}
-                className="inline-flex items-center gap-2 rounded-full bg-[#25D366] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#1da851]"
-              />
-              <CallButton
-                phone={branch.phone_whatsapp}
-                className="inline-flex items-center gap-2 rounded-full border border-neutral-300 px-4 py-2 text-sm font-semibold text-neutral-800 transition hover:bg-neutral-100"
-              />
-            </div>
+            <CallButton
+              phone={branch.phone_whatsapp}
+              className="inline-flex items-center gap-2 rounded-full bg-brand-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-brand-700"
+            />
 
             {branch.google_maps_embed_url && (
               <div className="overflow-hidden rounded-lg border border-neutral-200">

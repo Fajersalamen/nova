@@ -4,10 +4,8 @@ interface Props {
 }
 
 /**
- * A tel: link works for any phone (landline or mobile), unlike the
- * WhatsApp button which silently fails if the number has no WhatsApp
- * account. Showing both means a restaurant is always reachable even
- * before they've set up WhatsApp Business on their line.
+ * A tel: link works for any phone, landline or mobile — the only
+ * contact channel the site uses.
  */
 export function CallButton({ phone, className }: Props) {
   return (

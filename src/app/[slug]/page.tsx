@@ -6,7 +6,6 @@ import { configErrorMessage, missingSupabaseEnv } from '@/lib/env';
 import { fetchGoogleReviews } from '@/lib/google-places';
 import { MenuList } from '@/components/public/MenuList';
 import { MapEmbed } from '@/components/public/MapEmbed';
-import { WhatsAppButton } from '@/components/public/WhatsAppButton';
 import { CallButton } from '@/components/public/CallButton';
 import { ReviewsSection } from '@/components/public/ReviewsSection';
 import { ReviewForm } from '@/components/public/ReviewForm';
@@ -169,7 +168,7 @@ export default async function RestaurantPage({ params }: PageProps) {
         restaurantName={restaurant.name}
         logoUrl={restaurant.logo_url}
         address={restaurant.address}
-        phoneWhatsapp={restaurant.phone_whatsapp}
+        phone={restaurant.phone_whatsapp}
         hasMenu={hasMenu}
         hasReviews={hasReviews}
         hasMap={hasMap}
@@ -189,13 +188,9 @@ export default async function RestaurantPage({ params }: PageProps) {
                 <p className="text-lg text-neutral-600">{restaurant.address}</p>
               )}
               <div className="flex flex-wrap justify-center gap-3 lg:justify-start">
-                <WhatsAppButton
-                  phoneWhatsapp={restaurant.phone_whatsapp}
-                  restaurantName={restaurant.name}
-                />
                 <CallButton
                   phone={restaurant.phone_whatsapp}
-                  className="inline-flex items-center gap-2 rounded-full border border-brand-600 px-6 py-3 font-semibold text-brand-700 transition hover:bg-brand-600 hover:text-white"
+                  className="inline-flex items-center gap-2 rounded-full bg-brand-600 px-6 py-3 font-semibold text-white shadow-sm transition hover:bg-brand-700"
                 />
               </div>
             </div>
@@ -224,12 +219,7 @@ export default async function RestaurantPage({ params }: PageProps) {
                 <h2 id="menu-heading" className="sr-only">
                   المنيو
                 </h2>
-                <MenuList
-                  categories={categories}
-                  items={items}
-                  restaurantName={restaurant.name}
-                  phoneWhatsapp={restaurant.phone_whatsapp}
-                />
+                <MenuList categories={categories} items={items} phone={restaurant.phone_whatsapp} />
               </section>
             )}
 
@@ -254,7 +244,7 @@ export default async function RestaurantPage({ params }: PageProps) {
               </div>
             )}
 
-            <BranchesSection branches={branches} restaurantName={restaurant.name} />
+            <BranchesSection branches={branches} />
           </div>
         </main>
       </div>
@@ -262,22 +252,17 @@ export default async function RestaurantPage({ params }: PageProps) {
       <SiteFooter
         restaurantName={restaurant.name}
         address={restaurant.address}
-        phoneWhatsapp={restaurant.phone_whatsapp}
+        phone={restaurant.phone_whatsapp}
         hasMenu={hasMenu}
         hasMap={hasMap}
       />
 
       {/* Always-reachable contact bar on mobile, where scrolling the hero
-          buttons out of view would otherwise cost a real order. */}
-      <div className="fixed inset-x-0 bottom-0 z-20 flex gap-2 border-t border-neutral-200 bg-white p-3 shadow-[0_-4px_16px_rgba(0,0,0,0.08)] sm:hidden">
-        <WhatsAppButton
-          phoneWhatsapp={restaurant.phone_whatsapp}
-          restaurantName={restaurant.name}
-          className="inline-flex flex-1 items-center justify-center gap-2 rounded-full bg-[#25D366] px-4 py-3 font-semibold text-white transition hover:bg-[#1da851]"
-        />
+          button out of view would otherwise cost a real order. */}
+      <div className="fixed inset-x-0 bottom-0 z-20 border-t border-neutral-200 bg-white p-3 shadow-[0_-4px_16px_rgba(0,0,0,0.08)] sm:hidden">
         <CallButton
           phone={restaurant.phone_whatsapp}
-          className="inline-flex flex-1 items-center justify-center gap-2 rounded-full border border-neutral-300 px-4 py-3 font-semibold text-neutral-800 transition hover:bg-neutral-100"
+          className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-brand-600 px-4 py-3 font-semibold text-white transition hover:bg-brand-700"
         />
       </div>
     </>

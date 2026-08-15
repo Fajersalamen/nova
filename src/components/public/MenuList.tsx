@@ -4,11 +4,10 @@ import type { MenuCategory, MenuItem } from '@/types/database.types';
 interface Props {
   categories: MenuCategory[];
   items: MenuItem[];
-  restaurantName: string;
-  phoneWhatsapp: string;
+  phone: string;
 }
 
-export function MenuList({ categories, items, restaurantName, phoneWhatsapp }: Props) {
+export function MenuList({ categories, items, phone }: Props) {
   const itemsByCategory = new Map<string, MenuItem[]>();
   for (const item of items) {
     const bucket = itemsByCategory.get(item.category_id);
@@ -47,12 +46,7 @@ export function MenuList({ categories, items, restaurantName, phoneWhatsapp }: P
             {withMedia.length > 0 && (
               <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
                 {withMedia.map((item) => (
-                  <MenuItemCard
-                    key={item.id}
-                    item={item}
-                    restaurantName={restaurantName}
-                    phoneWhatsapp={phoneWhatsapp}
-                  />
+                  <MenuItemCard key={item.id} item={item} phone={phone} />
                 ))}
               </div>
             )}
@@ -60,12 +54,7 @@ export function MenuList({ categories, items, restaurantName, phoneWhatsapp }: P
             {withoutMedia.length > 0 && (
               <div className="space-y-3">
                 {withoutMedia.map((item) => (
-                  <MenuItemCard
-                    key={item.id}
-                    item={item}
-                    restaurantName={restaurantName}
-                    phoneWhatsapp={phoneWhatsapp}
-                  />
+                  <MenuItemCard key={item.id} item={item} phone={phone} />
                 ))}
               </div>
             )}
