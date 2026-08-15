@@ -169,9 +169,8 @@ export default async function RestaurantHomePage({ params }: PageProps) {
         sourceLabel={google.reviews.length > 0 ? 'على Google' : 'من زبائننا'}
       />
 
-      {restaurant.google_maps_embed_url && (
+      {restaurant.address && (
         <MapEmbed
-          embedUrl={restaurant.google_maps_embed_url}
           restaurantName={restaurant.name}
           address={restaurant.address}
           phone={restaurant.phone_whatsapp}

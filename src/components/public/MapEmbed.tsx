@@ -1,19 +1,14 @@
 import { Clock, MapPin, Navigation, Phone } from 'lucide-react';
+import { MapIllustration } from './MapIllustration';
 
 interface Props {
-  embedUrl: string;
   restaurantName: string;
   address: string | null;
   phone: string;
   hoursLabel: string | null;
 }
 
-/**
- * Google Maps iframe embed rather than the Maps JavaScript SDK: the SDK
- * pulls ~300kb+ of JS and blocks rendering, while a lazy iframe costs
- * nothing until it scrolls into view.
- */
-export function MapEmbed({ embedUrl, restaurantName, address, phone, hoursLabel }: Props) {
+export function MapEmbed({ restaurantName, address, phone, hoursLabel }: Props) {
   const directionsUrl = address
     ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`
     : null;
@@ -67,14 +62,7 @@ export function MapEmbed({ embedUrl, restaurantName, address, phone, hoursLabel 
         </div>
 
         <div className="overflow-hidden rounded-3xl border-4 border-accent-400 shadow-2xl">
-          <iframe
-            src={embedUrl}
-            title={`خريطة موقع ${restaurantName}`}
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
-            allowFullScreen
-            className="h-[340px] w-full border-0"
-          />
+          <MapIllustration />
         </div>
       </div>
     </section>
