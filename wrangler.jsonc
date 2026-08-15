@@ -2,6 +2,14 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "nova-restaurant-saas",
   "main": ".open-next/worker.js",
+  // Cloudflare's git-connected deploy only runs `npx wrangler versions
+  // upload` — it never ran the actual Next.js/OpenNext build, so
+  // `.open-next/worker.js` never existed and every deploy failed with
+  // "entry-point file not found". This tells wrangler itself to build
+  // first, regardless of what's configured (or not) in the dashboard.
+  "build": {
+    "command": "npm run cf:build"
+  },
   "compatibility_date": "2025-03-25",
   "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
   "assets": {
