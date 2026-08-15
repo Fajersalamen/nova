@@ -1,4 +1,7 @@
+'use client';
+
 import { Star } from 'lucide-react';
+import { useT } from './LocaleProvider';
 
 export interface MarqueeReview {
   name: string;
@@ -10,13 +13,14 @@ interface Props {
   reviews: MarqueeReview[];
   ratingValue: number | null;
   ratingCount: number | null;
-  sourceLabel: string;
+  isGoogleSourced: boolean;
 }
 
 /** Only real reviews already collected (Google or the site's own approved
  * ones) — the section is omitted entirely rather than showing placeholder
  * testimonials when none exist yet. */
-export function ReviewsMarquee({ reviews, ratingValue, ratingCount, sourceLabel }: Props) {
+export function ReviewsMarquee({ reviews, ratingValue, ratingCount, isGoogleSourced }: Props) {
+  const t = useT();
   if (reviews.length === 0) return null;
 
   const looped = reviews.length < 4 ? [...reviews, ...reviews, ...reviews] : [...reviews, ...reviews];
@@ -25,13 +29,14 @@ export function ReviewsMarquee({ reviews, ratingValue, ratingCount, sourceLabel 
     <section className="overflow-hidden border-y-4 border-ink bg-accent-400 py-14">
       <div className="mx-auto mb-8 max-w-6xl px-4 text-center">
         <h2 className="text-3xl font-black tracking-tight text-accent-900 sm:text-4xl">
-          شو بقولوا عنا؟
+          {t('reviewsHeading')}
         </h2>
         {ratingValue !== null && (
           <p className="mt-2 flex items-center justify-center gap-2 text-sm font-black text-accent-900/80">
             <Star className="h-4 w-4 fill-accent-900" aria-hidden />
             {ratingValue.toFixed(1)}
-            {ratingCount !== null && ` من ${ratingCount} تقييم`} {sourceLabel}
+            {ratingCount !== null && ` (${ratingCount})`}{' '}
+            {t(isGoogleSourced ? 'reviewsSourceGoogle' : 'reviewsSourceSite')}
           </p>
         )}
       </div>
@@ -39,7 +44,7 @@ export function ReviewsMarquee({ reviews, ratingValue, ratingCount, sourceLabel 
         <div className="flex w-max animate-marquee gap-6 px-3">
           {looped.map((review, i) => (
             <figure key={`${review.name}-${i}`} className="w-72 shrink-0 rounded-2xl bg-white p-5 shadow-md">
-              <div className="flex gap-0.5" aria-label={`${review.stars} من 5 نجوم`}>
+              <div className="flex gap-0.5" aria-label={`${review.stars} ${t('starsOf5')}`}>
                 {Array.from({ length: 5 }).map((_, s) => (
                   <Star
                     key={s}

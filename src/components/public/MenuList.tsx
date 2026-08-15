@@ -1,4 +1,5 @@
 import { MenuItemCard, MenuItemRow } from './MenuItemCard';
+import { T } from './T';
 import type { MenuCategory, MenuItem } from '@/types/database.types';
 
 interface Props {
@@ -19,7 +20,7 @@ export function MenuList({ categories, items }: Props) {
   if (populated.length === 0) {
     return (
       <p className="rounded-3xl border border-dashed border-border p-8 text-center font-semibold text-neutral-500">
-        المنيو قيد التحديث حاليًا.
+        <T k="menuComingSoon" />
       </p>
     );
   }

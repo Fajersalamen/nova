@@ -4,6 +4,9 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Clock } from 'lucide-react';
+import { useT } from './LocaleProvider';
+import { LanguageToggle } from './LanguageToggle';
+import type { StringKey } from '@/lib/i18n';
 
 interface Props {
   slug: string;
@@ -15,11 +18,12 @@ interface Props {
 
 export function SiteHeader({ slug, restaurantName, logoUrl, phone, hoursLabel }: Props) {
   const pathname = usePathname();
-  const navItems = [
-    { href: `/${slug}`, label: 'الرئيسية' },
-    { href: `/${slug}/menu`, label: 'القائمة' },
-    { href: `/${slug}/about`, label: 'من نحن' },
-    { href: `/${slug}/contact`, label: 'اتصل بنا' },
+  const t = useT();
+  const navItems: { href: string; key: StringKey }[] = [
+    { href: `/${slug}`, key: 'navHome' },
+    { href: `/${slug}/menu`, key: 'navMenu' },
+    { href: `/${slug}/about`, key: 'navAbout' },
+    { href: `/${slug}/contact`, key: 'navContact' },
   ];
 
   return (
@@ -29,7 +33,7 @@ export function SiteHeader({ slug, restaurantName, logoUrl, phone, hoursLabel }:
           {logoUrl ? (
             <Image
               src={logoUrl}
-              alt={`شعار ${restaurantName}`}
+              alt={`${t('logoAlt')} ${restaurantName}`}
               width={48}
               height={48}
               className="h-12 w-auto drop-shadow-md"
@@ -45,7 +49,7 @@ export function SiteHeader({ slug, restaurantName, logoUrl, phone, hoursLabel }:
           <span className="block text-sm font-bold leading-tight">{restaurantName}</span>
         </Link>
 
-        <nav className="hidden items-center gap-6 md:flex" aria-label="التنقل الرئيسي">
+        <nav className="hidden items-center gap-6 md:flex" aria-label="Main navigation">
           {navItems.map((item) => (
             <Link
               key={item.href}
@@ -54,7 +58,7 @@ export function SiteHeader({ slug, restaurantName, logoUrl, phone, hoursLabel }:
                 pathname === item.href ? 'text-accent-400' : ''
               }`}
             >
-              {item.label}
+              {t(item.key)}
             </Link>
           ))}
         </nav>
@@ -66,18 +70,19 @@ export function SiteHeader({ slug, restaurantName, logoUrl, phone, hoursLabel }:
               {hoursLabel}
             </span>
           )}
+          <LanguageToggle className="rounded-full border border-white/40 px-2.5 py-1 text-xs font-bold transition-colors hover:border-accent-400 hover:text-accent-400" />
           <a
             href={`tel:${phone.replace(/[^\d+]/g, '')}`}
             className="rounded-full bg-accent-400 px-4 py-2 text-sm font-black text-accent-900 shadow transition-transform hover:scale-105"
           >
-            اطلب الآن
+            {t('orderNow')}
           </a>
         </div>
       </div>
 
       <nav
         className="flex items-center justify-center gap-5 border-t border-white/15 py-2 md:hidden"
-        aria-label="التنقل الرئيسي للجوال"
+        aria-label="Mobile navigation"
       >
         {navItems.map((item) => (
           <Link
@@ -87,7 +92,7 @@ export function SiteHeader({ slug, restaurantName, logoUrl, phone, hoursLabel }:
               pathname === item.href ? 'text-accent-400' : ''
             }`}
           >
-            {item.label}
+            {t(item.key)}
           </Link>
         ))}
       </nav>

@@ -3,6 +3,8 @@ import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { fetchGoogleReviews } from '@/lib/google-places';
 import { computeRating, getRestaurantSiteData } from '@/lib/restaurant-site-data';
+import { T } from '@/components/public/T';
+import type { StringKey } from '@/lib/i18n';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -28,17 +30,22 @@ export default async function AboutPage({ params }: PageProps) {
   const rating = computeRating(google, internalReviews);
 
   const stats = [
-    rating.value !== null && { value: rating.value.toFixed(1), label: 'تقييم' },
-    rating.count !== null && { value: String(rating.count), label: 'تقييم من زبائننا' },
-    branches.length > 0 && { value: String(branches.length + 1), label: 'فروع' },
-  ].filter((s): s is { value: string; label: string } => Boolean(s));
+    rating.value !== null && { value: rating.value.toFixed(1), labelKey: 'statRating' as StringKey },
+    rating.count !== null && {
+      value: String(rating.count),
+      labelKey: 'statReviewsFromCustomers' as StringKey,
+    },
+    branches.length > 0 && { value: String(branches.length + 1), labelKey: 'statBranches' as StringKey },
+  ].filter((s): s is { value: string; labelKey: StringKey } => Boolean(s));
 
   const hasStory = Boolean(restaurant.about_title || restaurant.about_body);
 
   return (
     <main>
       <section className="bg-brand-600 py-16 text-center text-white">
-        <h1 className="text-5xl font-black tracking-tight sm:text-6xl">قصتنا</h1>
+        <h1 className="text-5xl font-black tracking-tight sm:text-6xl">
+          <T k="aboutPageTitle" />
+        </h1>
         <p className="mt-4 text-sm font-bold opacity-90">{restaurant.name}</p>
       </section>
 
@@ -89,9 +96,11 @@ export default async function AboutPage({ params }: PageProps) {
             }`}
           >
             {stats.map((s) => (
-              <div key={s.label}>
+              <div key={s.labelKey}>
                 <p className="text-4xl font-black text-accent-400 sm:text-5xl">{s.value}</p>
-                <p className="mt-2 text-sm font-bold opacity-90">{s.label}</p>
+                <p className="mt-2 text-sm font-bold opacity-90">
+                  <T k={s.labelKey} />
+                </p>
               </div>
             ))}
           </div>

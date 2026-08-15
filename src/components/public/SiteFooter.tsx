@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { Clock, MapPin, Phone } from 'lucide-react';
+import { T } from './T';
 
 interface Props {
   slug: string;
@@ -29,7 +30,7 @@ export function SiteFooter({
             {logoUrl ? (
               <Image
                 src={logoUrl}
-                alt={`شعار ${restaurantName}`}
+                alt={restaurantName}
                 width={64}
                 height={64}
                 className="h-16 w-auto"
@@ -46,22 +47,24 @@ export function SiteFooter({
           </div>
         </div>
 
-        <nav aria-label="روابط سريعة">
-          <h3 className="mb-4 text-sm font-black tracking-wide text-accent-400">روابط سريعة</h3>
+        <nav aria-label="Quick links">
+          <h3 className="mb-4 text-sm font-black tracking-wide text-accent-400">
+            <T k="quickLinks" />
+          </h3>
           <ul className="space-y-2 text-sm font-bold">
             <li>
               <Link href={`/${slug}`} className="opacity-80 transition-opacity hover:opacity-100">
-                الرئيسية
+                <T k="navHome" />
               </Link>
             </li>
             <li>
               <Link href={`/${slug}/menu`} className="opacity-80 transition-opacity hover:opacity-100">
-                القائمة
+                <T k="navMenu" />
               </Link>
             </li>
             <li>
               <Link href={`/${slug}/about`} className="opacity-80 transition-opacity hover:opacity-100">
-                من نحن
+                <T k="navAbout" />
               </Link>
             </li>
             <li>
@@ -69,14 +72,16 @@ export function SiteFooter({
                 href={`/${slug}/contact`}
                 className="opacity-80 transition-opacity hover:opacity-100"
               >
-                اتصل بنا
+                <T k="navContact" />
               </Link>
             </li>
           </ul>
         </nav>
 
         <div>
-          <h3 className="mb-4 text-sm font-black tracking-wide text-accent-400">تواصل معنا</h3>
+          <h3 className="mb-4 text-sm font-black tracking-wide text-accent-400">
+            <T k="contactUs" />
+          </h3>
           <ul className="space-y-3 text-sm font-bold">
             <li>
               <a
@@ -118,7 +123,7 @@ export function SiteFooter({
       </div>
 
       <div className="border-t border-cream/10 py-5 text-center text-xs font-bold opacity-70">
-        © {new Date().getFullYear()} {restaurantName}. جميع الحقوق محفوظة.
+        © {new Date().getFullYear()} {restaurantName}. <T k="allRightsReserved" />.
       </div>
     </footer>
   );

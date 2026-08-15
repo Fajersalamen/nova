@@ -4,6 +4,7 @@ import { configErrorMessage, missingSupabaseEnv } from '@/lib/env';
 import { getAllActiveSlugs, getRestaurantSiteData } from '@/lib/restaurant-site-data';
 import { SiteHeader } from '@/components/public/SiteHeader';
 import { SiteFooter } from '@/components/public/SiteFooter';
+import { LocaleProvider } from '@/components/public/LocaleProvider';
 
 // Static-with-revalidation instead of per-request SSR: the menu changes a
 // few times a week at most, but the page is hit by every visitor. Serving
@@ -57,28 +58,30 @@ export default async function RestaurantLayout({ children, params }: LayoutProps
   const { restaurant } = data;
 
   return (
-    <div className="flex min-h-screen flex-col bg-cream">
-      <SiteHeader
-        slug={slug}
-        restaurantName={restaurant.name}
-        logoUrl={restaurant.logo_url}
-        phone={restaurant.phone_whatsapp}
-        hoursLabel={restaurant.hours_label}
-      />
-      <div className="flex-1">{children}</div>
-      <SiteFooter
-        slug={slug}
-        restaurantName={restaurant.name}
-        logoUrl={restaurant.logo_url}
-        address={restaurant.address}
-        phone={restaurant.phone_whatsapp}
-        hoursLabel={restaurant.hours_label}
-        mapsUrl={
-          restaurant.address
-            ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(restaurant.address)}`
-            : null
-        }
-      />
-    </div>
+    <LocaleProvider>
+      <div className="flex min-h-screen flex-col bg-cream">
+        <SiteHeader
+          slug={slug}
+          restaurantName={restaurant.name}
+          logoUrl={restaurant.logo_url}
+          phone={restaurant.phone_whatsapp}
+          hoursLabel={restaurant.hours_label}
+        />
+        <div className="flex-1">{children}</div>
+        <SiteFooter
+          slug={slug}
+          restaurantName={restaurant.name}
+          logoUrl={restaurant.logo_url}
+          address={restaurant.address}
+          phone={restaurant.phone_whatsapp}
+          hoursLabel={restaurant.hours_label}
+          mapsUrl={
+            restaurant.address
+              ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(restaurant.address)}`
+              : null
+          }
+        />
+      </div>
+    </LocaleProvider>
   );
 }

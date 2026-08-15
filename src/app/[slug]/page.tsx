@@ -10,6 +10,7 @@ import { MenuItemCard } from '@/components/public/MenuItemCard';
 import { ReviewsMarquee, type MarqueeReview } from '@/components/public/ReviewsMarquee';
 import { MapEmbed } from '@/components/public/MapEmbed';
 import { CtaBand } from '@/components/public/CtaBand';
+import { T } from '@/components/public/T';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -70,7 +71,7 @@ export default async function RestaurantHomePage({ params }: PageProps) {
             {restaurant.hours_label && (
               <span className="inline-flex items-center gap-2 rounded-full bg-brand-600 px-4 py-1.5 text-xs font-black text-white shadow">
                 <span className="h-2 w-2 animate-pulse rounded-full bg-open" aria-hidden />
-                مفتوح الآن — {restaurant.hours_label}
+                <T k="openNowPrefix" /> {restaurant.hours_label}
               </span>
             )}
             <p className="mt-6 font-display text-sm tracking-[0.3em] text-secondary-600">
@@ -90,7 +91,7 @@ export default async function RestaurantHomePage({ params }: PageProps) {
                 href={`/${slug}/menu`}
                 className="rounded-full bg-brand-600 px-8 py-3.5 text-base font-black text-white shadow-lg transition-transform hover:scale-105"
               >
-                شاهد القائمة
+                <T k="viewMenu" />
               </Link>
               <a
                 href={`tel:${restaurant.phone_whatsapp.replace(/[^\d+]/g, '')}`}
@@ -128,7 +129,12 @@ export default async function RestaurantHomePage({ params }: PageProps) {
                 <div className="absolute -bottom-6 left-4 flex items-center gap-2 rounded-2xl bg-accent-400 px-4 py-2.5 font-black text-accent-900 shadow-lg sm:left-8">
                   <Star className="h-5 w-5 fill-accent-900" aria-hidden />
                   {rating.value.toFixed(1)}
-                  {rating.count !== null && ` (${rating.count} تقييم)`}
+                  {rating.count !== null && (
+                    <>
+                      {' ('}
+                      {rating.count} <T k="reviewsWord" />)
+                    </>
+                  )}
                 </div>
               )}
             </div>
@@ -146,12 +152,14 @@ export default async function RestaurantHomePage({ params }: PageProps) {
       {highlights.length > 0 && (
         <section className="mx-auto max-w-6xl px-4 py-20">
           <div className="mb-10 flex flex-wrap items-end justify-between gap-4">
-            <h2 className="text-4xl font-black tracking-tight text-ink sm:text-5xl">الأكثر طلبًا</h2>
+            <h2 className="text-4xl font-black tracking-tight text-ink sm:text-5xl">
+              <T k="mostOrdered" />
+            </h2>
             <Link
               href={`/${slug}/menu`}
               className="rounded-full border-2 border-ink px-6 py-2.5 text-sm font-black text-ink transition-colors hover:bg-ink hover:text-cream"
             >
-              القائمة الكاملة
+              <T k="fullMenu" />
             </Link>
           </div>
           <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
@@ -166,7 +174,7 @@ export default async function RestaurantHomePage({ params }: PageProps) {
         reviews={marqueeReviews}
         ratingValue={rating.value}
         ratingCount={rating.count}
-        sourceLabel={google.reviews.length > 0 ? 'على Google' : 'من زبائننا'}
+        isGoogleSourced={google.reviews.length > 0}
       />
 
       {restaurant.address && (
@@ -178,7 +186,7 @@ export default async function RestaurantHomePage({ params }: PageProps) {
         />
       )}
 
-      <CtaBand phone={restaurant.phone_whatsapp} heading="جعان؟ اتصل فينا." showFlame />
+      <CtaBand phone={restaurant.phone_whatsapp} heading={<T k="homeCta" />} showFlame />
     </main>
   );
 }

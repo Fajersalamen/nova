@@ -1,4 +1,5 @@
 import { MapPin, Phone } from 'lucide-react';
+import { T } from './T';
 import type { RestaurantBranch } from '@/types/database.types';
 
 interface Props {
@@ -11,7 +12,7 @@ export function BranchesSection({ branches }: Props) {
   return (
     <section aria-labelledby="branches-heading" className="mx-auto max-w-6xl px-4 pb-20">
       <h2 id="branches-heading" className="mb-8 text-3xl font-black tracking-tight text-ink">
-        فروعنا
+        <T k="ourBranches" />
       </h2>
 
       <div className="grid gap-8 sm:grid-cols-2">
