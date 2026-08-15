@@ -62,7 +62,9 @@ export function MediaUploader({ kind, value, onChange, label, hint }: Props) {
 
       const uploadResponse = await fetch(uploadUrl, {
         method: 'PUT',
-        headers: { 'content-type': contentType },
+        // Must match the headers the server signed into the presigned URL
+        // exactly, or R2 rejects the upload with a signature mismatch.
+        headers: { 'content-type': contentType, 'cache-control': 'public, max-age=31536000, immutable' },
         body: upload,
       });
 

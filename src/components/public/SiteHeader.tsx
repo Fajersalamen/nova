@@ -32,6 +32,7 @@ export function SiteHeader({ slug, restaurantName, logoUrl, phone, hoursLabel }:
               alt={`شعار ${restaurantName}`}
               width={48}
               height={48}
+              priority
               className="h-12 w-auto drop-shadow-md"
             />
           ) : (

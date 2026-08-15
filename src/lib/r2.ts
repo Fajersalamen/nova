@@ -59,7 +59,14 @@ export async function presignUpload({
   url.searchParams.set('X-Amz-Expires', String(expiresInSeconds));
 
   const signed = await client.sign(
-    new Request(url, { method: 'PUT', headers: { 'content-type': contentType } }),
+    new Request(url, {
+      method: 'PUT',
+      // Each key is a fresh crypto.randomUUID(), never reused, so it's safe
+      // to tell every browser/CDN to cache the object forever — this is
+      // what stops the logo (and every other uploaded image) from being
+      // re-fetched from R2 on every single page load/refresh.
+      headers: { 'content-type': contentType, 'cache-control': 'public, max-age=31536000, immutable' },
+    }),
     { aws: { signQuery: true } },
   );
 
