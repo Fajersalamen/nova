@@ -11,6 +11,11 @@ import { ACTION_OK, actionError, type ActionResult } from './types';
  * can never publish itself — an admin has to approve it first.
  */
 export async function submitReview(formData: FormData): Promise<ActionResult> {
+  // Honeypot: a hidden field no human ever fills in. Bots that blindly
+  // populate every input trip it; we just pretend the submission worked
+  // so they don't learn to skip the field.
+  if (formData.get('website')) return ACTION_OK;
+
   const restaurantId = z.string().uuid().safeParse(formData.get('restaurant_id'));
   if (!restaurantId.success) return actionError('مطعم غير صالح');
 

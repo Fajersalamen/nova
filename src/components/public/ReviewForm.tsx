@@ -38,6 +38,14 @@ export function ReviewForm({ restaurantId }: Props) {
       className="space-y-4 rounded-3xl border border-border bg-white p-8 shadow-sm"
     >
       <input type="hidden" name="restaurant_id" value={restaurantId} />
+      <input
+        type="text"
+        name="website"
+        tabIndex={-1}
+        autoComplete="off"
+        aria-hidden="true"
+        className="absolute -left-[9999px] h-0 w-0 opacity-0"
+      />
       <h3 className="text-2xl font-black text-ink">شاركنا رأيك</h3>
 
       <div className="grid gap-4 sm:grid-cols-2">
