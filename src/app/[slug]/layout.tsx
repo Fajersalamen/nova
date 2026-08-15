@@ -1,4 +1,5 @@
 import { notFound } from 'next/navigation';
+import type { Metadata } from 'next';
 import { configErrorMessage, missingSupabaseEnv } from '@/lib/env';
 import { getAllActiveSlugs, getRestaurantSiteData } from '@/lib/restaurant-site-data';
 import { SiteHeader } from '@/components/public/SiteHeader';
@@ -23,6 +24,16 @@ interface LayoutProps {
 export async function generateStaticParams() {
   const slugs = await getAllActiveSlugs();
   return slugs.map((slug) => ({ slug }));
+}
+
+// The browser tab icon for a restaurant's whole site is its own uploaded
+// logo, not a shared platform icon — falls back to the default favicon
+// when a restaurant hasn't uploaded one yet.
+export async function generateMetadata({ params }: LayoutProps): Promise<Metadata> {
+  const { slug } = await params;
+  const data = await getRestaurantSiteData(slug);
+  if (!data || 'configError' in data || !data.restaurant.logo_url) return {};
+  return { icons: { icon: data.restaurant.logo_url } };
 }
 
 export default async function RestaurantLayout({ children, params }: LayoutProps) {
