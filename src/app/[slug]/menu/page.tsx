@@ -4,7 +4,7 @@ import { ChevronDown } from 'lucide-react';
 import { getRestaurantSiteData } from '@/lib/restaurant-site-data';
 import { MenuList } from '@/components/public/MenuList';
 import { CtaBand } from '@/components/public/CtaBand';
-import { DonerSequence } from '@/components/public/DonerSequence';
+import { DonerLoop } from '@/components/public/DonerLoop';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -26,31 +26,26 @@ export default async function MenuPage({ params }: PageProps) {
 
   return (
     <main>
-      {/* Tall section + sticky inner frame: the spit holds the screen and
-          turns while the visitor scrolls past it. */}
-      <section className="relative h-[190vh] bg-black">
-        <div className="sticky top-16 flex h-[calc(100vh-4rem)] flex-col items-center overflow-hidden">
-          <div className="z-10 shrink-0 px-4 pt-8 text-center text-white sm:pt-10">
-            <h1 className="text-5xl font-black tracking-tight drop-shadow-lg sm:text-6xl">القائمة</h1>
-            <p className="mt-2 font-display text-xs tracking-[0.35em] text-accent-400">
-              {restaurant.name}
-            </p>
-            {restaurant.hours_label && (
-              <p className="mt-3 text-sm font-bold text-white/70">{restaurant.hours_label}</p>
-            )}
-          </div>
-
-          <DonerSequence className="min-h-0 w-auto flex-1 py-2" />
-
-          <div
-            className="pointer-events-none absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-black to-transparent"
-            aria-hidden
-          />
-          <ChevronDown
-            className="absolute bottom-6 h-6 w-6 animate-bounce text-accent-400"
-            aria-hidden
-          />
+      {/* Black to match the footage's own backdrop, so the spit reads as
+          floating rather than sitting in a visible video box. */}
+      <section className="relative flex h-[88vh] min-h-[560px] flex-col items-center overflow-hidden bg-black">
+        <div className="z-10 shrink-0 px-4 pt-8 text-center text-white sm:pt-10">
+          <h1 className="text-5xl font-black tracking-tight drop-shadow-lg sm:text-6xl">القائمة</h1>
+          <p className="mt-2 font-display text-xs tracking-[0.35em] text-accent-400">
+            {restaurant.name}
+          </p>
+          {restaurant.hours_label && (
+            <p className="mt-3 text-sm font-bold text-white/70">{restaurant.hours_label}</p>
+          )}
         </div>
+
+        <DonerLoop className="min-h-0 w-auto flex-1 object-contain py-2" />
+
+        <div
+          className="pointer-events-none absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-black to-transparent"
+          aria-hidden
+        />
+        <ChevronDown className="absolute bottom-6 h-6 w-6 animate-bounce text-accent-400" aria-hidden />
       </section>
 
       <div className="mx-auto max-w-6xl px-4 py-16">
