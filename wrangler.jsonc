@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "nova-restaurant-saas",
+  "name": "nova7",
   "main": ".open-next/worker.js",
   // Cloudflare's git-connected deploy only runs `npx wrangler versions
   // upload` — it never ran the actual Next.js/OpenNext build, so
@@ -31,7 +31,7 @@
   "kv_namespaces": [
     {
       "binding": "NEXT_TAG_CACHE_KV",
-      "id": "42461705bd974760b1836f82b2003eb"
+      "id": "42461705bd974760b1836f82b22003eb"
     }
   ]
 
