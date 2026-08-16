@@ -107,14 +107,14 @@ export function LocationsSection({ restaurantName, address, phone, hoursLabel, b
         </h2>
 
         <div className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-          {locations.map((location) => {
+          {locations.map((location, i) => {
             const dirUrl = directionsUrl(location.address);
             return (
               <article
                 key={location.key}
                 className="overflow-hidden rounded-3xl border-4 border-accent-400 bg-white text-ink shadow-2xl"
               >
-                <MapIllustration />
+                <MapIllustration variant={i} />
                 <div className="p-6">
                   <h3 className="text-xl font-black">{location.name}</h3>
                   {location.address && (
