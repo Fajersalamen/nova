@@ -26,3 +26,17 @@ body {
 .animate-marquee {
   animation: marquee 45s linear infinite;
 }
+
+/* Height of the sticky site header, which carries an extra nav row on
+   mobile. Sections that pin themselves below it (the menu hero, the
+   burger stack) offset by this instead of guessing, so their content
+   never slides under the nav. */
+:root {
+  --site-header: 101px;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --site-header: 68px;
+  }
+}
