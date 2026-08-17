@@ -28,7 +28,7 @@ export default async function MenuPage({ params }: PageProps) {
     <main>
       {/* Black to match the footage's own backdrop, so the spit reads as
           floating rather than sitting in a visible video box. */}
-      <section className="relative flex h-[88vh] min-h-[560px] flex-col items-center overflow-hidden bg-black">
+      <section className="relative flex h-[calc(88vh-var(--site-header))] min-h-[520px] flex-col items-center overflow-hidden bg-black">
         <div className="z-10 shrink-0 px-4 pt-8 text-center text-white sm:pt-10">
           <h1 className="text-5xl font-black tracking-tight drop-shadow-lg sm:text-6xl">القائمة</h1>
           <p className="mt-2 font-display text-xs tracking-[0.35em] text-accent-400">
