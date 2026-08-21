@@ -10,6 +10,7 @@ import { MenuItemCard } from '@/components/public/MenuItemCard';
 import { ReviewsMarquee, type MarqueeReview } from '@/components/public/ReviewsMarquee';
 import { LocationsSection } from '@/components/public/LocationsSection';
 import { BurgerStack } from '@/components/public/BurgerStack';
+import { BurgerHero } from '@/components/public/BurgerHero';
 import { CtaBand } from '@/components/public/CtaBand';
 
 interface PageProps {
@@ -141,6 +142,8 @@ export default async function RestaurantHomePage({ params }: PageProps) {
           )}
         </div>
       </section>
+
+      <BurgerHero />
 
       <ServicesStrip
         hasDineIn={restaurant.has_dine_in}
