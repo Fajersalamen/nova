@@ -1,0 +1,83 @@
+.fc-scope {
+  --fc-header-h: 84px;
+}
+
+@media (max-width: 767px) {
+  .fc-scope {
+    --fc-header-h: 72px;
+  }
+}
+
+.fc-scope ::selection {
+  background: #3a2a20;
+  color: #fbf4ea;
+}
+
+/* Hide scrollbars on horizontally-dragged rails while keeping them scrollable
+   (mouse-wheel, touch, and programmatic scroll all still work). */
+.fc-no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.fc-no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.fc-scope [data-fc-reveal] {
+  will-change: transform, opacity;
+}
+
+.fc-scope section[id] {
+  scroll-margin-top: var(--fc-header-h);
+}
+
+@keyframes fc-float {
+  0%,
+  100% {
+    transform: translateY(0) rotate(var(--fc-tilt, 0deg));
+  }
+  50% {
+    transform: translateY(-14px) rotate(var(--fc-tilt, 0deg));
+  }
+}
+
+.fc-float {
+  animation: fc-float 7s ease-in-out infinite;
+}
+
+@keyframes fc-drift {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+  100% {
+    transform: translate3d(0, -22px, 0) rotate(8deg);
+  }
+}
+
+.fc-drift {
+  animation: fc-drift 9s ease-in-out infinite alternate;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fc-scope * {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+.fc-scope .fc-grain {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+  mix-blend-mode: multiply;
+}
+
+.fc-scope input[type='radio'],
+.fc-scope input[type='checkbox'] {
+  accent-color: #3a2a20;
+}
+
+.fc-scope textarea:focus,
+.fc-scope input:focus {
+  outline: none;
+}
