@@ -2,7 +2,6 @@ import "react-native-url-polyfill/auto";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Constants from "expo-constants";
 import { createClient } from "@supabase/supabase-js";
-import type { Database } from "@/types/database.types";
 
 const extra = Constants.expoConfig?.extra ?? {};
 const supabaseUrl = extra.supabaseUrl as string | undefined;
@@ -15,7 +14,12 @@ if (!supabaseUrl || !supabaseAnonKey) {
   );
 }
 
-export const supabase = createClient<Database>(supabaseUrl ?? "", supabaseAnonKey ?? "", {
+// Untyped client: no hand-maintained Database generic (see database.types.ts —
+// it documents row shapes for the app to cast query results against, rather
+// than driving supabase-js's own generics, which need a full CLI-generated
+// schema to behave correctly). Swap in `supabase gen types typescript` output
+// once the project is live for real end-to-end type safety.
+export const supabase = createClient(supabaseUrl ?? "", supabaseAnonKey ?? "", {
   auth: {
     storage: AsyncStorage,
     autoRefreshToken: true,

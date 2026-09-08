@@ -34,3 +34,12 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# andi/ (Expo) and andi-admin/ (Next.js) — separate projects, same rules
+andi/node_modules
+andi/.expo/
+andi/.expo-shared/
+andi/dist/
+andi/web-build/
+andi-admin/node_modules
+andi-admin/.next/

@@ -96,7 +96,7 @@ export default function Search() {
         </Pressable>
       </View>
 
-      <ScrollView horizontal inverted showsHorizontalScrollIndicator={false} style={styles.sortRow} contentContainerStyle={{ gap: spacing.sm, paddingHorizontal: spacing.lg }}>
+      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.sortRow} contentContainerStyle={{ gap: spacing.sm, paddingHorizontal: spacing.lg }}>
         <SortChip label={t.search.sortNearest} active={sort === "nearest"} onPress={() => setSort("nearest")} />
         <SortChip label={t.search.sortCheapest} active={sort === "cheapest"} onPress={() => setSort("cheapest")} />
         <SortChip label={t.search.sortTopRated} active={sort === "rating"} onPress={() => setSort("rating")} />
@@ -128,7 +128,7 @@ export default function Search() {
             <Text style={typography.h3}>{t.search.filters}</Text>
 
             <Text style={styles.filterLabel}>{t.search.category}</Text>
-            <ScrollView horizontal inverted showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: spacing.sm }}>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: spacing.sm }}>
               {(categoriesQuery.data ?? []).map((c) => (
                 <Pressable
                   key={c.id}
@@ -143,7 +143,7 @@ export default function Search() {
             </ScrollView>
 
             <Text style={styles.filterLabel}>{t.search.price}</Text>
-            <ScrollView horizontal inverted showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: spacing.sm }}>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: spacing.sm }}>
               {[5, 10, 20, 50].map((price) => (
                 <Pressable
                   key={price}
@@ -156,7 +156,7 @@ export default function Search() {
             </ScrollView>
 
             <Text style={styles.filterLabel}>{t.search.rating}</Text>
-            <ScrollView horizontal inverted showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: spacing.sm }}>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: spacing.sm }}>
               {[4, 4.5].map((r) => (
                 <Pressable
                   key={r}

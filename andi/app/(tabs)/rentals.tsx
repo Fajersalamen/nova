@@ -64,7 +64,7 @@ export default function Rentals() {
         <RoleButton label="كمالك" active={role === "owner"} onPress={() => setRole("owner")} />
       </View>
 
-      <ScrollView horizontal inverted showsHorizontalScrollIndicator={false} style={{ flexGrow: 0 }} contentContainerStyle={styles.bucketRow}>
+      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ flexGrow: 0 }} contentContainerStyle={styles.bucketRow}>
         <BucketChip label={t.rentals.current} active={bucket === "current"} onPress={() => setBucket("current")} />
         <BucketChip label={t.rentals.upcoming} active={bucket === "upcoming"} onPress={() => setBucket("upcoming")} />
         <BucketChip label={t.rentals.past} active={bucket === "past"} onPress={() => setBucket("past")} />

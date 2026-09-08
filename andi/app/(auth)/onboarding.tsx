@@ -47,7 +47,6 @@ export default function Onboarding() {
         data={slides}
         horizontal
         pagingEnabled
-        inverted={false}
         showsHorizontalScrollIndicator={false}
         keyExtractor={(_, i) => String(i)}
         onMomentumScrollEnd={(e) => setIndex(Math.round(e.nativeEvent.contentOffset.x / width))}

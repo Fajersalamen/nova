@@ -33,7 +33,7 @@ export default function ItemDetails() {
   });
 
   useEffect(() => {
-    if (id) supabase.rpc("increment_item_view" as never, { p_item_id: id } as never).then(() => {});
+    if (id) supabase.rpc("increment_item_view", { p_item_id: id }).then(() => {});
   }, [id]);
 
   useEffect(() => {

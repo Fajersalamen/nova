@@ -97,7 +97,6 @@ export default function Home() {
         <SectionHeader title={t.home.categories} />
         <FlatList
           horizontal
-          inverted
           showsHorizontalScrollIndicator={false}
           data={categoriesQuery.data ?? []}
           keyExtractor={(c) => String(c.id)}
@@ -142,7 +141,6 @@ function HorizontalItems({ loading, items }: { loading: boolean; items?: ItemWit
     return (
       <FlatList
         horizontal
-        inverted
         showsHorizontalScrollIndicator={false}
         data={[1, 2, 3]}
         keyExtractor={(i) => String(i)}
@@ -159,7 +157,6 @@ function HorizontalItems({ loading, items }: { loading: boolean; items?: ItemWit
   return (
     <FlatList
       horizontal
-      inverted
       showsHorizontalScrollIndicator={false}
       data={items}
       keyExtractor={(i) => i.id}

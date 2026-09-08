@@ -37,7 +37,7 @@ export function DateChipPicker({
   onSelect: (option: DateOption) => void;
 }) {
   return (
-    <ScrollView horizontal inverted showsHorizontalScrollIndicator={false} contentContainerStyle={styles.row}>
+    <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.row}>
       {options.map((option) => {
         const active = option.key === selectedKey;
         return (

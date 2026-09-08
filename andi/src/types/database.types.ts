@@ -237,21 +237,3 @@ export interface PlatformSettings {
   min_rental_days: number;
   max_rental_days: number;
 }
-
-// Minimal Supabase Database type — enough for the typed client generic
-// without hand-maintaining every Row/Insert/Update variant for every table.
-export type Database = {
-  public: {
-    Tables: Record<string, { Row: any; Insert: any; Update: any }>;
-    Functions: {
-      items_nearby: {
-        Args: { p_lat: number; p_lng: number; p_limit?: number };
-        Returns: Item[];
-      };
-      distance_km: {
-        Args: { lat1: number; lng1: number; lat2: number; lng2: number };
-        Returns: number;
-      };
-    };
-  };
-};
