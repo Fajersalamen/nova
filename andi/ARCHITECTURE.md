@@ -12,7 +12,7 @@ its own Supabase project/schema, and its own deploy target.
 
 | Layer | Choice | Why |
 | --- | --- | --- |
-| Mobile app | React Native + Expo (SDK 51+, TypeScript) | Fastest path to a real installable iOS/Android app from one codebase; Expo Router gives file-based navigation close to what a web dev already knows; OTA updates later without app-store review. |
+| Mobile app | React Native + Expo (SDK 57+, TypeScript) | Fastest path to a real installable iOS/Android app from one codebase; Expo Router gives file-based navigation close to what a web dev already knows; OTA updates later without app-store review. Kept on the current SDK deliberately — Expo Go only runs the latest SDK, so staying current is what makes ad-hoc device testing possible at all. |
 | Navigation | `expo-router` | File-based, typed routes, built-in stacks/tabs, easy deep-linking into `item/[id]`, `chat/[id]`, etc. |
 | Backend | Supabase (Postgres + Auth + Storage + Realtime + RLS) | One managed backend covers auth (phone OTP), relational data, file storage (item photos), and realtime (chat, live rental status) — no custom server to run for the MVP. |
 | State/data | `@tanstack/react-query` + Supabase JS client | Caching, retries, optimistic updates for bookings/favorites without hand-rolled state machines. |
